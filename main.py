@@ -12,15 +12,15 @@ mongo_port = 7009
 mc = MemcacheClient([f'{ip}:{mc_port}'], debug=0)
 print(mc.get("default_message"))
 
-
 # neo4j test
 
 driver = neo4j.v1.GraphDatabase.driver(f"bolt://{ip}:{neo4j_port}", auth=neo4j.v1.basic_auth("neo4j", "pineo4j"))
 session = driver.session()
 
 result = session.run("MATCH (a:Phrase) WHERE a.start = {start} "
-                   "RETURN a.start AS start, a.end AS end",
-                   {"start": "Hello, World!"})
+                     "RETURN a.start AS start, a.end AS end",
+                     {"start": "Hello, World!"})
+
 for record in result:
     print("%s %s" % (record["start"], record["end"]))
 
