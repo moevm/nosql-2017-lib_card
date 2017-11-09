@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from pymongo.database import Database as MongoDatabase
 from pymongo.collection import Collection as MongoCollection
 from memcache import Client as MemcacheClient
+from typing import Tuple, Dict, List
 
 
 class Network:
@@ -18,6 +19,34 @@ class DatabaseName:
     MEMCACHED = 'memcached'
     MONGODB = 'mongo db'
     NEO4J = 'neo4j'
+
+
+class HistoryRecord:
+
+    def __init__(self, reader: str, date_from: str, date_to: str):
+        self.reader = reader
+        self.date_from = date_from
+        self.date_to = date_to
+
+    @staticmethod
+    def create_from_list(obj: List[Dict[str, str]]):
+        return [HistoryRecord(i['reader'], i['from'], i['to']) for i in obj] if obj else None
+
+
+class Card:
+
+    def __init__(self, title: str, author: str, year: str, history: List[HistoryRecord]):
+        self.title = title
+        self.author = author
+        self.year = year
+        self.history = history
+
+    def __str__(self):
+        return f'Card({self.title} {self.author} {self.year})'
+
+    @staticmethod
+    def create_from_dict(obj):
+        return Card(obj['title'], obj['author'], obj['year'], HistoryRecord.create_from_list(obj['history']))
 
 
 class TempDatabase:
@@ -41,16 +70,16 @@ class Database:
     def clear_db(self):
         pass
 
-    def add_card(self, id_, title, author, year):
+    def add_card(self, id_: str, card: Card) -> None:
         pass
 
     def remove_card(self, id_):
         pass
 
-    def update_card(self, id_, name, author, year):
+    def update_card(self, id_, card: Card) -> None:
         pass
 
-    def get_card(self, id_):
+    def get_card(self, id_) -> Card:
         pass
 
     def save(self):
@@ -63,11 +92,11 @@ class Memcached(Database):
         super().__init__(MemcacheClient([f'{ip}:{port}'], debug=0), DatabaseName.MEMCACHED)
         self.client: MemcacheClient
 
-    def add_card(self, id_, title, author, year):
-        self.client.set(id_, {'title': title, 'author': author, 'year': year, 'history': None})
+    def add_card(self, id_: str, card: Card):
+        self.client.set(id_, {'title': card.title, 'author': card.author, 'year': card.year, 'history': None})
 
     def get_card(self, id_):
-        return self.client.get(id_)
+        return Card.create_from_dict(self.client.get(id_))
 
 
 class Neo4j(Database):
@@ -78,23 +107,27 @@ class Neo4j(Database):
         super().__init__(session, DatabaseName.NEO4J)
         self.client: neo4j.v1.Driver
 
-
-    def add_card(self, id_, title, author, year):
+    def add_card(self, id_: str, card: Card):
         self.client: neo4j.v1.Driver
         session = self.client.session()
         session.run("""CREATE (card:Card {id: {id_}, histoty: "null"})
-                           MERGE (book:Book {title: {title}, year: {year}, author: {author}})
-                           MERGE (card)-[:ASSOCIATED_WITH]-(book)""" ,{"id_" : id_, "title" : title, "year" : year, "author" : author})
+                       MERGE (book:Book {title: {title}, year: {year}, author: {author}})
+                       MERGE (card)-[:ASSOCIATED_WITH]-(book)""", {"id_": id_,
+                                                                    "title": card.title,
+                                                                    "year": card.year,
+                                                                    "author": card.author})
 
     def get_card(self, id_):
         self.client: neo4j.v1.Driver
         session = self.client.session()
-        json = session.run("""MATCH (card:Card {id: {id_}})--(book: Book) RETURN book.title AS title, book.author AS author, book.year AS year, card.history AS history """,
-                               {"id_" : id_ })
-        json: neo4j.v1.BoltStatementResult
-        return json.data()[0]
+        result: neo4j.v1.BoltStatementResult = session.run("""MATCH (card:Card {id: {id_}})--(book: Book) 
+                                                            RETURN book.title AS title, 
+                                                            book.author AS author, 
+                                                            book.year AS year, 
+                                                            card.history AS history""",
+                                                           {"id_": id_})
 
-
+        return Card.create_from_dict(result.data()[0])
 
 
 class MongoDB(Database):
@@ -103,21 +136,26 @@ class MongoDB(Database):
         client = MongoClient(ip, port)
         super().__init__(client.library.my_collection, DatabaseName.MONGODB)
 
-    def add_card(self, id_, title, author, year):
+    def add_card(self, id_: str, card: Card):
         self.client: MongoCollection
         try:
-            self.client.insert_one({"_id" : id_,"title" : title,"author": author, "year" : year, "history" : None})
+            self.client.insert_one({"_id": id_,
+                                    "title": card.title,
+                                    "author": card.author,
+                                    "year": card.year,
+                                    "history": None})
         except:
-            self.client.replace_one(self.get_card(id_),
-                                    {"_id": id_, "title": title, "author": author, "year": year, "history": None})
+            self.client.replace_one(self.client.find({"_id": id_}).next(),
+                                    {"_id": id_,
+                                     "title": card.title,
+                                     "author": card.author,
+                                     "year": card.year,
+                                     "history": None})
 
     def get_card(self, id_):
         self.client: MongoDatabase
         res = self.client.find({"_id": id_}).next()
-        return {key: res[key] for key in res if key != '_id'}
-
-
-
+        return Card.create_from_dict({key: res[key] for key in res if key != '_id'})
 
 
 class DatabaseManager:
@@ -159,7 +197,7 @@ class DatabaseManager:
         pass
 
     def add_card(self, id_, title, author, year):
-        self._curr_db.add_card(id_, title, author, year)
+        self._curr_db.add_card(id_, Card(title, author, year, None))
 
     def remove_card(self, id_):
         pass
