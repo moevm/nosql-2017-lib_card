@@ -4,6 +4,7 @@ from pymongo.database import Database as MongoDatabase
 from pymongo.collection import Collection as MongoCollection
 from memcache import Client as MemcacheClient
 from typing import Tuple, Dict, List
+from bottle import route, run, static_file
 
 
 class Network:
@@ -223,6 +224,26 @@ db.switch_to_database(DatabaseName.NEO4J)
 db.add_card("2", "Test title", "Artur", "2k17")
 json = db.get_card("2")
 print('neo4j:', json)
+
+
+@route('/')
+def index():
+    return static_file('index.html', root='html')
+
+
+@route('/<img:re:favicon.ico>')
+@route('/img/<img:path>')
+def img_serve(img):
+    return static_file(img, root='html/img')
+
+
+# for css files
+@route('/static/<file:path>')
+def static_serve(file):
+    return static_file(file, root='html/static')
+
+
+run(host='127.0.0.1', port=80)
 
 
 # memcached test
