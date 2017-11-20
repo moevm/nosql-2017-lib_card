@@ -108,27 +108,47 @@ class Neo4j(Database):
         super().__init__(session, DatabaseName.NEO4J)
         self.client: neo4j.v1.Driver
 
+    def create_temp_db(self) -> TempDatabase:
+        pass
+
+    def load_from_temp_db(self, database: TempDatabase):
+        pass
+
+    def clear_db(self):
+        with self.client.session() as session:
+            session.run("MATCH (node) DETACH DELETE node")
+
     def add_card(self, id_: str, card: Card):
-        self.client: neo4j.v1.Driver
-        session = self.client.session()
-        session.run("""CREATE (card:Card {id: {id_}, histoty: "null"})
+        query: str = """MERGE (card:Card {id: {id_}, histoty: "null"})
                        MERGE (book:Book {title: {title}, year: {year}, author: {author}})
-                       MERGE (card)-[:ASSOCIATED_WITH]-(book)""", {"id_": id_,
-                                                                    "title": card.title,
-                                                                    "year": card.year,
-                                                                    "author": card.author})
+                       MERGE (card)-[:ASSOCIATED_WITH]-(book)"""
+        args: dict = {"id_": id_, "title": card.title, "year": card.year, "author": card.author}
+        with self.client.session() as session:
+            session.run(query, args)
+
+    def remove_card(self, id_):
+        query: str = "MATCH (book:Book)-[rel:ASSOCIATED_WITH]-(card:Card {id: {id_}}) DELETE card, rel"
+        args: dict = {"id_": id_}
+        with self.client.session() as session:
+            session.run(query, args)
+
+    def update_card(self, id_, card: Card):
+        query: str = "MATCH (card:Card {id: {id_}})-[]-(book:Book) " \
+                     "SET book.title = {title}, book.author = {author}, book.year = {year}"
+        args: dict = {"id_": id_, "title": card.title, "author": card.author, "year": card.year}
+        with self.client.session() as session:
+            session.run(query, args)
 
     def get_card(self, id_):
-        self.client: neo4j.v1.Driver
-        session = self.client.session()
-        result: neo4j.v1.BoltStatementResult = session.run("""MATCH (card:Card {id: {id_}})--(book: Book) 
-                                                            RETURN book.title AS title, 
-                                                            book.author AS author, 
-                                                            book.year AS year, 
-                                                            card.history AS history""",
-                                                           {"id_": id_})
-
-        return Card.create_from_dict(result.data()[0])
+        query: str = """MATCH (card:Card {id: {id_}})--(book: Book)
+                    RETURN book.title AS title, book.author AS author, book.year AS year, card.history AS history"""
+        args: dict = {"id_": id_}
+        with self.client.session() as session:
+            result: neo4j.v1.BoltStatementResult = session.run(query, args)
+            records: list = result.data()
+            if len(records) == 0:
+                return None
+            return Card.create_from_dict(records[0])
 
 
 class MongoDB(Database):
@@ -195,16 +215,16 @@ class DatabaseManager:
         pass
 
     def clear_db(self):
-        pass
+        self._curr_db.clear_db()
 
     def add_card(self, id_, title, author, year):
         self._curr_db.add_card(id_, Card(title, author, year, None))
 
     def remove_card(self, id_):
-        pass
+        self._curr_db.remove_card(id_)
 
     def update_card(self, id_, name, author, year):
-        pass
+        self._curr_db.update_card(id_, Card(name, author, year, None))
 
     def get_card(self, id_):
         return self._curr_db.get_card(id_)
@@ -225,6 +245,39 @@ db.add_card("2", "Test title", "Artur", "2k17")
 json = db.get_card("2")
 print('neo4j:', json)
 
+#Test Neo4j queries
+print("Test Neo4j queries")
+db.clear_db()
+
+#add and get
+print("Adding a card")
+db.add_card("17", "Goluboe salo", "Vladimir Sorokin", "1999")
+print(db.get_card("17"))
+
+#update
+print("Now it should be changed with a new date by updating")
+db.update_card("17", "Goluboe salo", "Vladimir Sorokin", "2000")
+print(db.get_card("17"))
+
+#add with same id
+print("Now it should return back its date by adding a new card with same id")
+db.add_card("17", "Goluboe salo", "Vladimir Sorokin", "1999")
+print(db.get_card("17"))
+
+#remove
+print("Let's remove it, we want to get None as result of search")
+db.remove_card("17")
+print(db.get_card("17"))
+
+#clear db
+print("Now we push two new cards and fuck up all data")
+db.add_card("13", "The Teachings of Don Juan", "C. Castaneda", "1968")
+db.add_card("87", "Hermit and Sixfinger", "V. Pelevin", "1990")
+db.clear_db()
+print(db.get_card("13"))
+print(db.get_card("87"))
+
+#it's too sad when you don't know how to use unit tests
 
 @route('/')
 def index():
