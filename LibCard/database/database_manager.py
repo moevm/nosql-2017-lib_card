@@ -71,18 +71,27 @@ class DatabaseManager:
     def get_card(self, id_) -> Card:
         return self._curr_db.get_card(id_)
 
+    def print_curr_database(self) -> str:
+        if self._curr_db == self._memcached:
+            return MEMCACHED
+        elif self._curr_db == self._mongodb:
+            return MONGODB
+        elif self._curr_db == self._neo4j:
+            return NEO4J
+
 
 def database_manager_tests():
     db: DatabaseManager = DatabaseManager()
+    db.switch_to_database(MEMCACHED)
     db.add_card("Test title", "Artur", "2k17")
     json = db.get_card("2")
     print('memcached:', json)
-
+    '''
     db.switch_to_database(MONGODB)
     db.add_card("Test title", "Artur", "2k17")
     json = db.get_card("2")
     print('mongodb:', json)
-
+    '''
     db.switch_to_database(NEO4J)
     db.add_card("Test title", "Artur", "2k17")
     json = db.get_card("2")

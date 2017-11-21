@@ -29,7 +29,7 @@ class Memcached(Database):
             return None
 
     def get_max_id(self):
-        return max(int(i) for i in self.keys)
+        return max(int(i) for i in self.keys) if self.keys else -1
 
     def is_empty(self):
         return len(self.keys) > 0
