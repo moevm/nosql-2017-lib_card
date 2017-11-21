@@ -59,6 +59,9 @@ class DatabaseManager:
         old_db.clear_db()
         self._curr_db.load_from_temp_db(temp_db)
 
+    def clear_db(self):
+        self._curr_db.clear_db()
+
     def add_card(self, title, author, year):
         self._curr_db.add_card(self._next_id(), Card(title, author, year, None))
 
@@ -84,7 +87,8 @@ def database_manager_tests():
     db: DatabaseManager = DatabaseManager()
     db.switch_to_database(MEMCACHED)
     db.add_card("Test title", "Artur", "2k17")
-    json = db.get_card("2")
+    json = db.get_card("0")
+    db.clear_db()
     print('memcached:', json)
     '''
     db.switch_to_database(MONGODB)
@@ -94,7 +98,8 @@ def database_manager_tests():
     '''
     db.switch_to_database(NEO4J)
     db.add_card("Test title", "Artur", "2k17")
-    json = db.get_card("2")
+    json = db.get_card("1")
+    db.clear_db()
     print('neo4j:', json)
 
 
