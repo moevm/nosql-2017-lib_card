@@ -20,7 +20,7 @@
             <div id="sidebar-add">
                 Название <input id="search-title" type="text"/><br><br>
                 Автор <input id="search-author" type="text"/><br><br>
-                Год выпуска <input id="search-date" type="text"/><br><br>
+                Год выпуска <input id="search-date" type="number"/><br><br><br>
                 <div class="button-holder">
                     <span id="load-image-button" class="btn"><nobr>Загрузить изображение</nobr></span>
                 </div>
@@ -32,7 +32,7 @@
             <div id="sidebar-search">
                 Название <input id="search-title" type="text"/><br><br>
                 Автор <input id="search-author" type="text"/><br><br>
-                Год выпуска <input id="search-date" type="text"/><br><br>
+                Год выпуска <input id="search-date" type="number"/><br><br>
                 Идентификатор <input id="search-id" type="text"/><br><br>
                 <input name="card-type" type="radio" value="all" checked>Любые<br>
                 <input name="card-type" type="radio" value="available">Только свободные<br>
@@ -43,13 +43,222 @@
                 </div>
             </div>
             <div id="sidebar-settings">
-                settings
+                <input name="db" type="radio" value="memcached" checked>Memcached<br>
+                <input name="db" type="radio" value="mongodb">MongoDB<br>
+                <input name="db" type="radio" value="neo4j">Neo4j<br>
+                <br><br>
+                <div class="button-holder">
+                    <span id="apply-button" class="btn">Подтвердить</span>
+                </div>
             </div>
         </div>
     </div>
 
     <div id="cards">
-        cards
+        <div id="234243" class="card">
+            <div class="card-image-container"><img class="card-image" src="img/1.png"></img></div>
+            <div class="card-info">
+                <div class="card-info-item">
+                    Название:<br><span class="field-value">Евгений Онегин</span>
+                </div>
+                <div class="card-info-item">
+                    Год выпуска:<br><span class="field-value">2011</span>
+                    </div>
+                <div class="card-info-item">
+                    Автор:<br><span class="field-value">Пушкин А.С.</span>
+                </div>
+                <div class="card-id">2356</div>
+            </div>
+        </div>
+        <div id="2342433" class="card">
+            <div class="card-image-container"><img class="card-image" src="img/1.png"></img></div>
+            <div class="card-info">
+                <div class="card-info-item">
+                    Название:<br><span class="field-value">Евгений Онегин</span>
+                </div>
+                <div class="card-info-item">
+                    Год выпуска:<br><span class="field-value">2011</span>
+                    </div>
+                <div class="card-info-item">
+                    Автор:<br><span class="field-value">Пушкин А.С.</span>
+                </div>
+                <div class="card-id">2356</div>
+            </div>
+        </div>
+
+
+        <div id="2342433" class="card">
+            <div class="card-image-container"><img class="card-image" src="img/1.png"></img></div>
+            <div class="card-info">
+                <div class="card-info-item">
+                    Название:<br><span class="field-value">Евгений Онегин</span>
+                </div>
+                <div class="card-info-item">
+                    Год выпуска:<br><span class="field-value">2011</span>
+                    </div>
+                <div class="card-info-item">
+                    Автор:<br><span class="field-value">Пушкин А.С.</span>
+                </div>
+                <div class="card-id">2356</div>
+            </div>
+        </div><div id="2342433" class="card">
+            <div class="card-image-container"><img class="card-image" src="img/1.png"></img></div>
+            <div class="card-info">
+                <div class="card-info-item">
+                    Название:<br><span class="field-value">Евгений Онегин</span>
+                </div>
+                <div class="card-info-item">
+                    Год выпуска:<br><span class="field-value">2011</span>
+                    </div>
+                <div class="card-info-item">
+                    Автор:<br><span class="field-value">Пушкин А.С.</span>
+                </div>
+                <div class="card-id">2356</div>
+            </div>
+        </div><div id="2342433" class="card">
+            <div class="card-image-container"><img class="card-image" src="img/1.png"></img></div>
+            <div class="card-info">
+                <div class="card-info-item">
+                    Название:<br><span class="field-value">Евгений Онегин</span>
+                </div>
+                <div class="card-info-item">
+                    Год выпуска:<br><span class="field-value">2011</span>
+                    </div>
+                <div class="card-info-item">
+                    Автор:<br><span class="field-value">Пушкин А.С.</span>
+                </div>
+                <div class="card-id">2356</div>
+            </div>
+        </div><div id="2342433" class="card">
+            <div class="card-image-container"><img class="card-image" src="img/1.png"></img></div>
+            <div class="card-info">
+                <div class="card-info-item">
+                    Название:<br><span class="field-value">Евгений Онегин</span>
+                </div>
+                <div class="card-info-item">
+                    Год выпуска:<br><span class="field-value">2011</span>
+                    </div>
+                <div class="card-info-item">
+                    Автор:<br><span class="field-value">Пушкин А.С.</span>
+                </div>
+                <div class="card-id">2356</div>
+            </div>
+        </div><div id="2342433" class="card">
+            <div class="card-image-container"><img class="card-image" src="img/1.png"></img></div>
+            <div class="card-info">
+                <div class="card-info-item">
+                    Название:<br><span class="field-value">Евгений Онегин</span>
+                </div>
+                <div class="card-info-item">
+                    Год выпуска:<br><span class="field-value">2011</span>
+                    </div>
+                <div class="card-info-item">
+                    Автор:<br><span class="field-value">Пушкин А.С.</span>
+                </div>
+                <div class="card-id">2356</div>
+            </div>
+        </div><div id="2342433" class="card">
+            <div class="card-image-container"><img class="card-image" src="img/1.png"></img></div>
+            <div class="card-info">
+                <div class="card-info-item">
+                    Название:<br><span class="field-value">Евгений Онегин</span>
+                </div>
+                <div class="card-info-item">
+                    Год выпуска:<br><span class="field-value">2011</span>
+                    </div>
+                <div class="card-info-item">
+                    Автор:<br><span class="field-value">Пушкин А.С.</span>
+                </div>
+                <div class="card-id">2356</div>
+            </div>
+        </div><div id="2342433" class="card">
+            <div class="card-image-container"><img class="card-image" src="img/1.png"></img></div>
+            <div class="card-info">
+                <div class="card-info-item">
+                    Название:<br><span class="field-value">Евгений Онегин</span>
+                </div>
+                <div class="card-info-item">
+                    Год выпуска:<br><span class="field-value">2011</span>
+                    </div>
+                <div class="card-info-item">
+                    Автор:<br><span class="field-value">Пушкин А.С.</span>
+                </div>
+                <div class="card-id">2356</div>
+            </div>
+        </div><div id="2342433" class="card">
+            <div class="card-image-container"><img class="card-image" src="img/1.png"></img></div>
+            <div class="card-info">
+                <div class="card-info-item">
+                    Название:<br><span class="field-value">Евгений Онегин</span>
+                </div>
+                <div class="card-info-item">
+                    Год выпуска:<br><span class="field-value">2011</span>
+                    </div>
+                <div class="card-info-item">
+                    Автор:<br><span class="field-value">Пушкин А.С.</span>
+                </div>
+                <div class="card-id">2356</div>
+            </div>
+        </div><div id="2342433" class="card">
+            <div class="card-image-container"><img class="card-image" src="img/1.png"></img></div>
+            <div class="card-info">
+                <div class="card-info-item">
+                    Название:<br><span class="field-value">Евгений Онегин</span>
+                </div>
+                <div class="card-info-item">
+                    Год выпуска:<br><span class="field-value">2011</span>
+                    </div>
+                <div class="card-info-item">
+                    Автор:<br><span class="field-value">Пушкин А.С.</span>
+                </div>
+                <div class="card-id">2356</div>
+            </div>
+        </div><div id="2342433" class="card">
+            <div class="card-image-container"><img class="card-image" src="img/1.png"></img></div>
+            <div class="card-info">
+                <div class="card-info-item">
+                    Название:<br><span class="field-value">Евгений Онегин</span>
+                </div>
+                <div class="card-info-item">
+                    Год выпуска:<br><span class="field-value">2011</span>
+                    </div>
+                <div class="card-info-item">
+                    Автор:<br><span class="field-value">Пушкин А.С.</span>
+                </div>
+                <div class="card-id">2356</div>
+            </div>
+        </div><div id="2342433" class="card">
+            <div class="card-image-container"><img class="card-image" src="img/1.png"></img></div>
+            <div class="card-info">
+                <div class="card-info-item">
+                    Название:<br><span class="field-value">Евгений Онегин</span>
+                </div>
+                <div class="card-info-item">
+                    Год выпуска:<br><span class="field-value">2011</span>
+                    </div>
+                <div class="card-info-item">
+                    Автор:<br><span class="field-value">Пушкин А.С.</span>
+                </div>
+                <div class="card-id">2356</div>
+            </div>
+        </div><div id="2342433" class="card">
+            <div class="card-image-container"><img class="card-image" src="img/1.png"></img></div>
+            <div class="card-info">
+                <div class="card-info-item">
+                    Название:<br><span class="field-value">Евгений Онегин</span>
+                </div>
+                <div class="card-info-item">
+                    Год выпуска:<br><span class="field-value">2011</span>
+                    </div>
+                <div class="card-info-item">
+                    Автор:<br><span class="field-value">Пушкин А.С.</span>
+                </div>
+                <div class="card-id">2356</div>
+            </div>
+        </div>
+
+        
+        
     </div>
 
 

@@ -6,19 +6,23 @@ body{
 body, html {
   height: 97%;
   margin: 10px;
+  min-width: 700px;
 }
 
 #sidebar {
     float: right;
     width: 200px;
-    height: 80%;
+    height: 380px;
 }
 
 #cards {
+    text-align: right;
+    overflow-y: scroll;
     height: 100%;
     margin-right: 220px;
     margin-left: 0;
-    background-color: white;
+    padding: 20px;
+    min-width: 450px;
 }
 
 .sidebar-content {
@@ -27,7 +31,7 @@ body, html {
     border-color: #aaa;
     border-style: solid;
     border-width: 1px;
-    padding: 10px;
+    padding: 5px;
 }
 
 .sidebar-icon {
@@ -40,7 +44,7 @@ body, html {
     cursor: pointer;
 }
 
-input[type="text"] {
+input[type="text"], input[type="number"] {
     box-sizing:border-box;
     width: 100%;
 }
@@ -53,11 +57,66 @@ input[type="text"] {
     padding: 5px;
 }
 
-#search-button:hover {
+.btn:hover {
     cursor: pointer;
     background-color: #c0c0c0;
 }
 
 .button-holder {
     text-align: center;
+}
+
+.card {
+    text-align: left;
+    margin: 5px;
+    display: inline-block;
+    width: 450px;
+    height: 170px;
+    background-color: #f0f0f0;
+    border-color: #aaa;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.card-image-container {
+    float: left;
+    text-align: center;
+    padding: 10px;
+    width: 170px;
+    height: 170px;
+}
+
+.card-image {
+    height: 90%;
+}
+
+.card-info {
+    width: 250px;
+    height: 170px;
+    margin-left: 200px;
+    position: relative;
+}
+
+.card-id {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    color: #777;
+    text-align: right;
+}
+
+.field-value {
+    color: #777;
+    font-style: italic;
+}
+
+.card-info-item {
+    padding: 5px;
+}
+
+.card:hover {
+    cursor: pointer;
+    background-color: #e0e0e0;
 }
