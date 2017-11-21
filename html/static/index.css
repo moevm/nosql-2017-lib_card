@@ -1,90 +1,60 @@
 body{
     background: url(/img/bg.png);
+    font-family: Helvetica;
 }
 
-#menu{
-    margin: auto;
-    width: 400px;
+body, html {
+  height: 97%;
+  margin: 10px;
 }
 
-.item{
-    text-align: center;
-    border-radius: 15px;
+#sidebar {
+    display : inline-block;
+    float: right;
+    width: 15%;
+    height: 90%;
+}
+
+#cards {
+    display : inline-block;
+    width: 83%;
+    height: 100%;
     background-color: white;
-    border-width: 0px;
-    width: 380px;
-    height: 30px;
-    margin-top: 30px;
+    float: left;
+}
+
+.sidebar-content {
+    height: 100%;
+    background-color: #f0f0f0;
+    border-color: #aaa;
+    border-style: solid;
+    border-width: 1px;
     padding: 10px;
-    font-size: 25px;
-    cursor: default;
-    font-family: helvetica;
 }
 
-.chess:hover{
-    background-color: #eaca99;
-    color: #963707;
+.sidebar-icon {
+    width: 20%;
+    height: 20%;
+    margin: 4%;
 }
 
-.poker:hover{
-    background-color: black;
-    color: #f80000;
+.sidebar-icon:hover {
+    cursor: pointer;
 }
 
-.rubiks:hover{
-    background-color: #2574BB;
-    color: #FF6A00;
+input[type="text"] {
+    box-sizing:border-box;
+    width: 100%;
 }
 
-.standard:hover{
-    background-color: #c0c0c0;
-    color: #303030;
+#search-button {
+    background-color: #f0f0f0;
+    border-color: #aaa;
+    border-style: solid;
+    border-width: 1px;
+    padding: 10px;
 }
 
-input[type=range]{
-    -webkit-appearance: none;
-    width: 190px;
-    border-radius: 8px;
-    height: 7px;
-    border: 1px solid #bdc3c7;
-    background-color: #fff;
-}
-
-input[type=range]:focus{
-    outline: none;
-}
-
-input[type=text]{
-    -webkit-appearance: none;
-    width: 280px;
-    border-radius: 8px;
-    height: 20px;
-    padding: 5px;
-    border: 1px solid #bdc3c7;
-    background-color: #fff;
-    font-size: 15px;
-    font-family: helvetica;
-    text-align: center;
-    margin-left: 50px;
-    margin-top: 30px;
-}
-
-input[type=text]:focus{
-    outline: none;
-}
-
-.hidden{
-    display: none;
-}
-
-.text{
-    font-size: 25px;
-    font-family: helvetica;
-    padding-left:10px;
-    margin-top: 20px; 
-    text-align: center;
-}
-
-.small_text{
-    font-size: 20px;
+#search-button:hover {
+    cursor: pointer;
 }
