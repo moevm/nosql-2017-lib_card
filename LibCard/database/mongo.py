@@ -1,7 +1,7 @@
-from network import server_ip, mongo_port
-from database import *
-from card import Card
-import pymongo
+from database.network import server_ip, mongo_port
+from database.database import *
+from database.card import Card
+from pymongo import DESCENDING as DESCENDING
 from pymongo import MongoClient
 from pymongo.database import Database as MongoDatabase
 from pymongo.collection import Collection as MongoCollection
@@ -56,35 +56,9 @@ class MongoDB(Database):
 
     def get_max_id(self) -> int:
         try:
-            return int(self.get_all_documents().sort([('_id', pymongo.DESCENDING)])[0]['_id'])
+            return int(self.get_all_documents().sort([('_id', DESCENDING)])[0]['_id'])
         except:
             return -1
 
     def is_empty(self) -> bool:
         return False if self.get_all_documents().count() > 0 else True
-
-
-mongoDB = MongoDB()
-
-#firstCard = Card('Vovan007', 'Artur Azarau', '2017', None)
-secondCard = Card('Vovan007', 'Artur Azar', '2017', None)
-thirdCard = Card('Vovan007', 'Artur Aza', '2017', None)
-#mongoDB.add_card('1',firstCard)
-# mongoDB.add_card('2',secondCard)
-# mongoDB.add_card('3',thirdCard)
-# card = Card('Vovan008', 'Artur Azarov', '201734234', None)
-# mongoDB.update_card('1', card)
-#getCard = monogDB.get_card(1)
-#print(getCard.title)
-mongoDB.clear_db()
-#monogDB.remove_card('1')
-# all_documents = mongoDB.get_all_documents()
-# for element in all_documents:
-#     print(element)
-
-a = mongoDB.get_max_id()
-print(a)
-b = mongoDB.is_empty()
-print(b)
-# for doc in :
-#     print(doc['_id'])
