@@ -3,17 +3,35 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Vladimir Turov</title>
+	<title>Система управления библиотечными карточками</title>
     <link rel="stylesheet" type="text/css" href="static/index.css">
 </head>
 <body>
-    <div id=menu>
-        <div id=state style='font-size: 25px;font-family: helvetica;padding-left:10px;margin-top: 30px; text-align: center;'>
-            Сайт Владимира Турова
+    
+    
+
+    <aside id="sidebar">
+        <div id="sidebar-menu">
+            <img class="sidebar-icon" src="/img/inactive-add-icon.png"></img>
+            <img class="sidebar-icon" src="/img/active-search-icon.png"></img>
+            <img class="sidebar-icon" src="/img/inactive-settings-icon.png"></img>
         </div>
-        <div class='item chess' onclick="window.location='/chess'">Шахматы</div>
-        <div class='item poker' onclick="window.location='/poker'">Покер</div>
-        <div class='item rubiks' onclick="window.location='/rubiks'">Кубик Рубика</div>
+        <div class="sidebar-content" id="search">
+            Название <input id="search-title" type="text"/><br><br>
+            Автор <input id="search-author" type="text"/><br><br>
+            Год выпуска <input id="search-date" type="text"/><br><br>
+            Идентификатор <input id="search-id" type="text"/><br><br>
+            <input name="card-type" type="radio" value="all" checked>Любые<br>
+            <input name="card-type" type="radio" value="available">Только свободные<br>
+            <input name="card-type" type="radio" value="unavailable">Только занятые<br>
+            <br>
+            <span id="search-button">Найти</span>
+        </div>
+    </aside>
+
+    <div id="cards">
+        cards
     </div>
+
 </body>
 </html>
