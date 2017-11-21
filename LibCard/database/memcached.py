@@ -34,6 +34,12 @@ class Memcached(Database):
     def is_empty(self):
         return len(self.keys) > 0
 
+    def clear_db(self):
+        self.client: MemcacheClient
+        for key in self.keys:
+            self.client.delete(key)
+        self.keys = []
+
 
 def memcached_tests():
     db = Memcached()
