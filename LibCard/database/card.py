@@ -25,5 +25,5 @@ class Card:
         return f'Card({self.title} {self.author} {self.year})'
 
     @staticmethod
-    def create_from_dict(obj):
+    def create_from_dict(obj) -> 'Card':
         return Card(obj['title'], obj['author'], obj['year'], HistoryRecord.create_from_list(obj['history']))

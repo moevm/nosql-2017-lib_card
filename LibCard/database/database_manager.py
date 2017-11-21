@@ -10,8 +10,34 @@ class DatabaseManager:
         self._memcached = Memcached()
         self._neo4j = Neo4j()
         self._mongodb = MongoDB()
+        self._curr_db: Database
 
-        self._curr_db: Database = self._memcached
+        is_neo4j_empty = self._neo4j.is_empty()
+        is_mongo_empty = self._mongodb.is_empty()
+
+        if is_neo4j_empty and is_mongo_empty:
+            self._curr_db = self._memcached
+
+        elif is_neo4j_empty and not is_mongo_empty:
+            self._curr_db = self._mongodb
+
+        elif not is_neo4j_empty and is_mongo_empty:
+            self._curr_db = self._neo4j
+
+        else:
+            self._mongodb.clear_db()
+            self._curr_db = self._neo4j
+
+        self._id = self._generate_ids()
+
+    def _generate_ids(self):
+        id_: int = self._curr_db.get_max_id()
+        while True:
+            id_ += 1
+            yield str(id_)
+
+    def _next_id(self):
+        return next(self._id)
 
     def switch_to_database(self, database: DBTYPE):
 
@@ -33,23 +59,14 @@ class DatabaseManager:
         old_db.clear_db()
         self._curr_db.load_from_temp_db(temp_db)
 
-    def create_temp_db(self) -> TempDatabase:
-        pass
-
-    def load_from_temp_db(self, database: TempDatabase):
-        pass
-
-    def clear_db(self):
-        self._curr_db.clear_db()
-
-    def add_card(self, id_, title, author, year):
-        self._curr_db.add_card(id_, Card(title, author, year, None))
+    def add_card(self, title, author, year):
+        self._curr_db.add_card(self._next_id(), Card(title, author, year, None))
 
     def remove_card(self, id_):
         self._curr_db.remove_card(id_)
 
-    def update_card(self, id_, name, author, year):
-        self._curr_db.update_card(id_, Card(name, author, year, None))
+    def update_card(self, name, author, year):
+        self._curr_db.update_card(self._next_id(), Card(name, author, year, None))
 
     def get_card(self, id_) -> Card:
         return self._curr_db.get_card(id_)
@@ -57,17 +74,17 @@ class DatabaseManager:
 
 def database_manager_tests():
     db: DatabaseManager = DatabaseManager()
-    db.add_card("2", "Test title", "Artur", "2k17")
+    db.add_card("Test title", "Artur", "2k17")
     json = db.get_card("2")
     print('memcached:', json)
 
     db.switch_to_database(MONGODB)
-    db.add_card("2", "Test title", "Artur", "2k17")
+    db.add_card("Test title", "Artur", "2k17")
     json = db.get_card("2")
     print('mongodb:', json)
 
     db.switch_to_database(NEO4J)
-    db.add_card("2", "Test title", "Artur", "2k17")
+    db.add_card("Test title", "Artur", "2k17")
     json = db.get_card("2")
     print('neo4j:', json)
 

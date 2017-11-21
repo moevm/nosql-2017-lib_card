@@ -37,3 +37,9 @@ class Database:
 
     def save(self):
         pass
+
+    def is_empty(self) -> bool:
+        pass
+
+    def get_max_id(self) -> int:
+        pass
