@@ -54,6 +54,15 @@ class Neo4j(Database):
                 return None
             return Card.create_from_dict(records[0])
 
+    def get_max_id(self) -> int:
+        query = "MATCH (card:Card) RETURN card.id AS id ORDER BY card.id DESC LIMIT 1"
+        with self.client.session() as session:
+            result: neo4j.v1.BoltStatementResult = session.run(query)
+            records: list = result.data()
+            if len(records) == 0:
+                return 0
+            return int(records[0]["id"])
+
 
 def neo4j_tests():
     # Test Neo4j queries
@@ -81,10 +90,14 @@ def neo4j_tests():
     db.remove_card("17")
     print(db.get_card("17"))
 
-    # clear db
-    print("Now we push two new cards and fuck up all data")
+    #get max id
+    print("Test get max id, it should be 87")
     db.add_card("13", Card("The Teachings of Don Juan", "C. Castaneda", "1968", None))
     db.add_card("87", Card("Hermit and Sixfinger", "V. Pelevin", "1990", None))
+    print(db.get_max_id())
+
+    # clear db
+    print("Now we fuck up all data")
     db.clear_db()
     print(db.get_card("13"))
     print(db.get_card("87"))
