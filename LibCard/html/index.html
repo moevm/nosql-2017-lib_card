@@ -5,33 +5,55 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Система управления библиотечными карточками</title>
     <link rel="stylesheet" type="text/css" href="static/index.css">
+    <script src="static/script.js"></script>
 </head>
 <body>
     
-    
 
-    <aside id="sidebar">
+    <div id="sidebar">
         <div id="sidebar-menu">
-            <img class="sidebar-icon" src="/img/inactive-add-icon.png"></img>
-            <img class="sidebar-icon" src="/img/active-search-icon.png"></img>
-            <img class="sidebar-icon" src="/img/inactive-settings-icon.png"></img>
+            <img id="add-icon" class="sidebar-icon" src="/img/inactive-add-icon.png" onclick="switchSidebar('add')"></img>
+            <img id="search-icon" class="sidebar-icon" src="/img/active-search-icon.png" onclick="switchSidebar('search')"></img>
+            <img id="settings-icon" class="sidebar-icon" src="/img/inactive-settings-icon.png" onclick="switchSidebar('settings')"></img>
         </div>
         <div class="sidebar-content" id="search">
-            Название <input id="search-title" type="text"/><br><br>
-            Автор <input id="search-author" type="text"/><br><br>
-            Год выпуска <input id="search-date" type="text"/><br><br>
-            Идентификатор <input id="search-id" type="text"/><br><br>
-            <input name="card-type" type="radio" value="all" checked>Любые<br>
-            <input name="card-type" type="radio" value="available">Только свободные<br>
-            <input name="card-type" type="radio" value="unavailable">Только занятые<br>
-            <br>
-            <span id="search-button">Найти</span>
+            <div id="sidebar-add">
+                Название <input id="search-title" type="text"/><br><br>
+                Автор <input id="search-author" type="text"/><br><br>
+                Год выпуска <input id="search-date" type="text"/><br><br>
+                <div class="button-holder">
+                    <span id="load-image-button" class="btn"><nobr>Загрузить изображение</nobr></span>
+                </div>
+                <br><br>
+                <div class="button-holder">
+                    <span id="add-button" class="btn">Добавить</span>
+                </div>
+            </div>
+            <div id="sidebar-search">
+                Название <input id="search-title" type="text"/><br><br>
+                Автор <input id="search-author" type="text"/><br><br>
+                Год выпуска <input id="search-date" type="text"/><br><br>
+                Идентификатор <input id="search-id" type="text"/><br><br>
+                <input name="card-type" type="radio" value="all" checked>Любые<br>
+                <input name="card-type" type="radio" value="available">Только свободные<br>
+                <input name="card-type" type="radio" value="unavailable">Только занятые<br>
+                <br><br>
+                <div class="button-holder">
+                    <span id="search-button" class="btn">Найти</span>
+                </div>
+            </div>
+            <div id="sidebar-settings">
+                settings
+            </div>
         </div>
-    </aside>
+    </div>
 
     <div id="cards">
         cards
     </div>
+
+
+    
 
 </body>
 </html>
