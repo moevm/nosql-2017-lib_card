@@ -5,6 +5,7 @@ from pymongo import DESCENDING as DESCENDING
 from pymongo import MongoClient
 from pymongo.database import Database as MongoDatabase
 from pymongo.collection import Collection as MongoCollection
+import unittest
 
 
 class MongoDB(Database):
