@@ -43,7 +43,7 @@ class Neo4j(Database):
         with self.client.session() as session:
             session.run(query, args)
 
-    def get_card(self, id_):
+    def get_card(self, id_) -> Card:
         query: str = """MATCH (card:Card {id: {id_}})--(book: Book)
                     RETURN book.title AS title, book.author AS author, book.year AS year, card.history AS history"""
         args: dict = {"id_": id_}

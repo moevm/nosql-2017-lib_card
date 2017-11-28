@@ -18,15 +18,18 @@ class DatabaseManager:
         if is_neo4j_empty and is_mongo_empty:
             self._curr_db = self._memcached
 
-        elif is_neo4j_empty and not is_mongo_empty:
-            self._curr_db = self._mongodb
-
-        elif not is_neo4j_empty and is_mongo_empty:
-            self._curr_db = self._neo4j
-
         else:
-            self._mongodb.clear_db()
-            self._curr_db = self._neo4j
+            self._memcached.clear_db()
+
+            if is_neo4j_empty and not is_mongo_empty:
+                self._curr_db = self._mongodb
+
+            elif not is_neo4j_empty and is_mongo_empty:
+                self._curr_db = self._neo4j
+
+            else:
+                self._mongodb.clear_db()
+                self._curr_db = self._neo4j
 
         self._id = self._generate_ids()
 
@@ -62,8 +65,10 @@ class DatabaseManager:
     def clear_db(self):
         self._curr_db.clear_db()
 
-    def add_card(self, title, author, year):
-        self._curr_db.add_card(self._next_id(), Card(title, author, year, None))
+    def add_card(self, title, author, year) -> str:
+        id_ = self._next_id()
+        self._curr_db.add_card(id_, Card(title, author, year, None))
+        return id_
 
     def remove_card(self, id_):
         self._curr_db.remove_card(id_)
@@ -90,12 +95,12 @@ def database_manager_tests():
     json = db.get_card("0")
     db.clear_db()
     print('memcached:', json)
-    '''
+
     db.switch_to_database(MONGODB)
     db.add_card("Test title", "Artur", "2k17")
     json = db.get_card("2")
     print('mongodb:', json)
-    '''
+
     db.switch_to_database(NEO4J)
     db.add_card("Test title", "Artur", "2k17")
     json = db.get_card("1")

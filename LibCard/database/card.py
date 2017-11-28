@@ -15,7 +15,7 @@ class HistoryRecord:
 
 class Card:
 
-    def __init__(self, title: str, author: str, year: str, history: List[HistoryRecord]):
+    def __init__(self, title: str, author: str, year: str, history: List[HistoryRecord]=None):
         self.title = title
         self.author = author
         self.year = year

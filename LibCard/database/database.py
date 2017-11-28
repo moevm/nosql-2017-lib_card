@@ -35,9 +35,6 @@ class Database:
     def get_card(self, id_) -> Card:
         pass
 
-    def save(self):
-        pass
-
     def is_empty(self) -> bool:
         pass
 
