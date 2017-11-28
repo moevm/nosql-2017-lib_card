@@ -1,3 +1,4 @@
+import unittest
 from database.network import server_ip, neo4j_port
 from database.database import *
 from database.card import Card
@@ -73,51 +74,56 @@ class Neo4j(Database):
             return bool(records[0]["isEmpty"])
 
 
-def neo4j_tests():
-    # Test Neo4j queries
-    print("Test Neo4j queries")
-    db = Neo4j()
-    db.clear_db()
+class Neo4jTest(unittest.TestCase):
+    def test_add_and_get(self):
+        neo4j = Neo4j()
+        card = Card('Vova007', 'Artur', '2k17', None)
+        neo4j.add_card('1', card)
+        self.assertIsInstance(neo4j.get_card('1'), Card)
+        neo4j.clear_db()
 
-    # add and get
-    print("Adding a card")
-    db.add_card("17", Card("Goluboe salo", "Vladimir Sorokin", "1999", None))
-    print(db.get_card("17"))
+    def test_update(self):
+        neo4j = Neo4j()
+        card = Card('Vova007', 'Artur', '2k17', None)
+        neo4j.add_card('1', card)
+        old_card = neo4j.get_card('1')
+        old_card_tuple = (old_card.title, old_card.author, old_card.year, old_card.history)
+        card_for_update = Card('Spica', 'Spicin', '1980', None)
+        neo4j.update_card('1', card_for_update)
+        updated_card = neo4j.get_card('1')
+        new_card_tuple = (updated_card.title, updated_card.author,updated_card.year, updated_card.history)
+        self.assertNotEqual(old_card_tuple, new_card_tuple, 'Comparing old and new cards')
+        neo4j.clear_db()
 
-    # update
-    print("Now it should be changed with a new date by updating")
-    db.update_card("17", Card("Goluboe salo", "Vladimir Sorokin", "2000", None))
-    print(db.get_card("17"))
+    def test_remove(self):
+        neo4j = Neo4j()
+        card = Card('Vova007', 'Artur', '2k17', None)
+        neo4j.add_card('1', card)
+        neo4j.remove_card('1')
+        search_result = neo4j.get_card('1')
+        self.assertIsNone(search_result)
+        neo4j.clear_db()
 
-    # add with same id
-    print("Now it should return back its date by adding a new card with same id")
-    db.add_card("17", Card("Goluboe salo", "Vladimir Sorokin", "1999", None))
-    print(db.get_card("17"))
+    def test_get_max_id(self):
+        neo4j = Neo4j()
+        firstCard = Card('Vova007', 'Artur', '2k17', None)
+        secondCard = Card('Vova007', 'Artur', '2k17', None)
+        thirdCard = Card('Vova007', 'Artur', '2k17', None)
+        neo4j.add_card('2',firstCard)
+        neo4j.add_card('3', secondCard)
+        neo4j.add_card('4', thirdCard)
+        self.assertEqual(neo4j.get_max_id(), 4)
+        neo4j.clear_db()
 
-    # remove
-    print("Let's remove it, we want to get None as result of search")
-    db.remove_card("17")
-    print(db.get_card("17"))
+    def test_clear_db(self):
+        neo4j = Neo4j()
+        neo4j.clear_db()
+        self.assertEqual(neo4j.is_empty(), True)
 
-    #get max id
-    print("Test get max id, it should be 87")
-    db.add_card("13", Card("The Teachings of Don Juan", "C. Castaneda", "1968", None))
-    db.add_card("87", Card("Hermit and Sixfinger", "V. Pelevin", "1990", None))
-    print(db.get_max_id())
-
-    #clear db
-    print("Now we fuck up all data")
-    db.clear_db()
-    print(db.get_card("13"))
-    print(db.get_card("87"))
-
-    #is_empty
-    print("is_empty must be true")
-    print(db.is_empty())
-    print("is_empty must be false")
-    db.add_card("13", Card("The Teachings of Don Juan", "C. Castaneda", "1968", None))
-    print(db.is_empty())
-
-
-if __name__ == '__main__':
-    neo4j_tests()
+    def test_is_empty(self):
+        neo4j = Neo4j()
+        card = Card('Vova007', 'Artur', '2k17', None)
+        neo4j.add_card('1', card)
+        self.assertEqual(neo4j.is_empty(), False)
+        neo4j.clear_db()
+        self.assertEqual(neo4j.is_empty(), True)

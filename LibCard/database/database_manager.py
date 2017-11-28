@@ -1,3 +1,4 @@
+import unittest
 from database.memcached import Memcached
 from database.mongo import MongoDB
 from database.neo4j import Neo4j
@@ -79,6 +80,9 @@ class DatabaseManager:
     def get_card(self, id_) -> Card:
         return self._curr_db.get_card(id_)
 
+    def get_all_cards(self):
+        return self._curr_db.get_all_cards()
+
     def print_curr_database(self) -> str:
         if self._curr_db == self._memcached:
             return MEMCACHED
@@ -88,25 +92,89 @@ class DatabaseManager:
             return NEO4J
 
 
-def database_manager_tests():
-    db: DatabaseManager = DatabaseManager()
-    db.switch_to_database(MEMCACHED)
-    db.add_card("Test title", "Artur", "2k17")
-    json = db.get_card("0")
-    db.clear_db()
-    print('memcached:', json)
+class DatabaseManagerTests(unittest.TestCase):
+    def test_switching(self):
+        db = DatabaseManager()
+        db.switch_to_database(MEMCACHED)
+        self.assertEqual(db.print_curr_database(), MEMCACHED)
+        db.switch_to_database(MONGODB)
+        self.assertEqual(db.print_curr_database(), MONGODB)
+        db.switch_to_database(NEO4J)
+        self.assertEqual(db.print_curr_database(), NEO4J)
 
-    db.switch_to_database(MONGODB)
-    db.add_card("Test title", "Artur", "2k17")
-    json = db.get_card("2")
-    print('mongodb:', json)
+    def test_adding(self):
+        db = DatabaseManager()
+        db.switch_to_database(MEMCACHED)
+        test_card = ("Test title", "Artur", "2k17")
+        key = db.add_card(*test_card)
+        json = db.get_card(key)
+        self.assertEqual((json.title, json.author, json.year), test_card)
+        db.clear_db()
 
-    db.switch_to_database(NEO4J)
-    db.add_card("Test title", "Artur", "2k17")
-    json = db.get_card("1")
-    db.clear_db()
-    print('neo4j:', json)
+        db.switch_to_database(MONGODB)
+        key = db.add_card(*test_card)
+        json = db.get_card(key)
+        self.assertEqual((json.title, json.author, json.year), test_card)
+        db.clear_db()
 
+        db.switch_to_database(NEO4J)
+        key = db.add_card(*test_card)
+        json = db.get_card(key)
+        self.assertEqual((json.title, json.author, json.year), test_card)
+        db.clear_db()
 
-if __name__ == '__main__':
-    database_manager_tests()
+    def test_choose_right_db_to_start(self):
+        db = DatabaseManager()
+        db.switch_to_database(MONGODB)
+        test_card = ("Test title", "Artur", "2k17")
+        db.add_card(*test_card)
+        del db
+
+        db = DatabaseManager()
+        self.assertEqual(db.print_curr_database(), MONGODB)
+        db.clear_db()
+        db.switch_to_database(NEO4J)
+        db.add_card(*test_card)
+        del db
+
+        db = DatabaseManager()
+        self.assertEqual(db.print_curr_database(), NEO4J)
+        db.clear_db()
+        db.switch_to_database(MEMCACHED)
+        db.add_card(*test_card)
+        del db
+
+        db = DatabaseManager()
+        self.assertEqual(db.print_curr_database(), MEMCACHED)
+
+    def test_correct_data_after_reloading_db(self):
+        db = DatabaseManager()
+        db.switch_to_database(MEMCACHED)
+        test_card = ("Test title", "Artur", "2k17")
+        key = db.add_card(*test_card)
+        del db
+
+        db = DatabaseManager()
+        result = db.get_card(key)
+        self.assertEqual((result.title, result.author, result.year), test_card)
+        db.clear_db()
+
+        test_card = ("Another Test title", "Vladimir", "1996")
+        db.switch_to_database(NEO4J)
+        key = db.add_card(*test_card)
+        del db
+
+        db = DatabaseManager()
+        result = db.get_card(key)
+        self.assertEqual((result.title, result.author, result.year), test_card)
+        db.clear_db()
+
+        test_card = ("Other Test title", "Igorek", "2017")
+        db.switch_to_database(MONGODB)
+        key = db.add_card(*test_card)
+        del db
+
+        db = DatabaseManager()
+        result = db.get_card(key)
+        self.assertEqual((result.title, result.author, result.year), test_card)
+        db.clear_db()

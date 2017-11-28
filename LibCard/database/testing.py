@@ -1,18 +1,18 @@
 from unittest import TestLoader, TextTestRunner, TestSuite
-from database.neo4j import neo4j_tests
-from database.memcached import memcached_tests
-from database.database_manager import database_manager_tests
+from database.neo4j import Neo4jTest
+from database.memcached import MemcachedTest
+from database.database_manager import DatabaseManagerTests
 from database.mongo import MongoTest
 
 
 def test_all():
-    database_manager_tests()
-    neo4j_tests()
-    memcached_tests()
 
     loader = TestLoader()
     suite = TestSuite((
         loader.loadTestsFromTestCase(MongoTest),
+        loader.loadTestsFromTestCase(MemcachedTest),
+        loader.loadTestsFromTestCase(Neo4jTest),
+        loader.loadTestsFromTestCase(DatabaseManagerTests),
     ))
 
     runner = TextTestRunner(verbosity=2)

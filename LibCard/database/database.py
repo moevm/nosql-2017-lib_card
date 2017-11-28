@@ -1,5 +1,6 @@
 from database.card import Card
 from database.temp_database import TempDatabase
+from typing import List
 
 
 DBTYPE = str
@@ -39,4 +40,7 @@ class Database:
         pass
 
     def get_max_id(self) -> int:
+        pass
+
+    def get_all_cards(self) -> List[Card]:
         pass
