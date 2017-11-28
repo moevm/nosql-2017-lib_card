@@ -18,9 +18,9 @@ class Memcached(Database):
         pass
 
     def add_card(self, id_: str, card: Card):
-
         self.client.set(id_, {'title': card.title, 'author': card.author, 'year': card.year, 'history': None})
-        self.keys += [id_]
+        if id_ not in self.keys:
+            self.keys += [id_]
 
     def get_card(self, id_):
         if id_ in self.keys:
@@ -28,11 +28,19 @@ class Memcached(Database):
         else:
             return None
 
+    def remove_card(self, id_):
+        if id_ in self.keys:
+            self.client.delete(id_)
+            del self.keys[self.keys.index(id_)]
+
+    def update_card(self, id_, card: Card) -> None:
+        self.add_card(id_, card)
+
     def get_max_id(self):
         return max(int(i) for i in self.keys) if self.keys else -1
 
     def is_empty(self):
-        return len(self.keys) > 0
+        return False if len(self.keys) > 0 else True
 
     def clear_db(self):
         self.client: MemcacheClient
