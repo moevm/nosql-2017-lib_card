@@ -24,6 +24,9 @@ class Card:
     def __str__(self):
         return f'Card({self.title} {self.author} {self.year})'
 
+    def __eq__(self, other: 'Card'):
+        return self.title == other.title and self.author == other.author and self.year == other.year
+
     @staticmethod
     def create_from_dict(obj) -> 'Card':
         return Card(obj['title'], obj['author'], obj['year'], HistoryRecord.create_from_list(obj['history']))

@@ -22,7 +22,8 @@ class Memcached(Database):
 
     def add_card(self, id_: str, card: Card):
         self.client: MemcacheClient
-        self.client.set(id_, {'title': card.title, 'author': card.author, 'year': card.year, 'history': None})
+        self.client.delete(id_)
+        self.client.add(id_, {'title': card.title, 'author': card.author, 'year': card.year, 'history': None})
         if id_ not in self.keys:
             self.keys += [id_]
             self.client.set('keys', self.keys)
@@ -55,11 +56,8 @@ class Memcached(Database):
         self.keys = []
         self.client.set('keys', self.keys)
 
-    def get_all_cards(self):
-        card_list = []
-        for key in self.keys:
-            card_list += [self.get_card(key)]
-        return card_list
+    def get_all_keys(self):
+        return self.keys
 
 
 class MemcachedTest(unittest.TestCase):
@@ -97,7 +95,7 @@ class MemcachedTest(unittest.TestCase):
         firstCard = Card('Vova007', 'Artur', '2k17', None)
         secondCard = Card('Vova007', 'Artur', '2k17', None)
         thirdCard = Card('Vova007', 'Artur', '2k17', None)
-        memcached.add_card('2',firstCard)
+        memcached.add_card('2', firstCard)
         memcached.add_card('3', secondCard)
         memcached.add_card('4', thirdCard)
         self.assertEqual(memcached.get_max_id(), 4)
@@ -115,3 +113,13 @@ class MemcachedTest(unittest.TestCase):
         self.assertEqual(memcached.is_empty(), False)
         memcached.clear_db()
         self.assertEqual(memcached.is_empty(), True)
+
+    def test_get_all_cards(self):
+        memcached = Memcached()
+        firstCard = Card('Vova007', 'Artur', '2k17', None)
+        secondCard = Card('Vova007', 'Artur', '2k17', None)
+        thirdCard = Card('Vova007', 'Artur', '2k17', None)
+        memcached.add_card('2', firstCard)
+        memcached.add_card('3', secondCard)
+        memcached.add_card('4', thirdCard)
+        self.assertEqual(memcached.get_all_keys(), ['2', '3', '4'])

@@ -80,8 +80,8 @@ class DatabaseManager:
     def get_card(self, id_) -> Card:
         return self._curr_db.get_card(id_)
 
-    def get_all_cards(self):
-        return self._curr_db.get_all_cards()
+    def get_all_keys(self):
+        return self._curr_db.get_all_keys()
 
     def print_curr_database(self) -> str:
         if self._curr_db == self._memcached:
@@ -90,6 +90,13 @@ class DatabaseManager:
             return MONGODB
         elif self._curr_db == self._neo4j:
             return NEO4J
+
+    def set_test_enviroment(self):
+        self.switch_to_database(MEMCACHED)
+        self.add_card('Best seller', 'Vladimir', '2k17')
+        self.add_card('Another best', 'Artur', '2017')
+        self.add_card('Other best', 'Igor', '20I7')
+
 
 
 class DatabaseManagerTests(unittest.TestCase):

@@ -42,5 +42,5 @@ class Database:
     def get_max_id(self) -> int:
         pass
 
-    def get_all_cards(self) -> List[Card]:
+    def get_all_keys(self) -> List[str]:
         pass

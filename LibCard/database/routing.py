@@ -1,9 +1,7 @@
-from bottle import route, run, static_file, get, post, request
+from bottle import route, run, static_file, get, post, request, response
 from database.network import local_ip, server_port
 import json
 from database.database_manager import *
-
-db = DatabaseManager()
 
 
 @get('/')
@@ -13,14 +11,25 @@ def index():
 
 @post('/')
 def post_request():
-    print(request.json)
-    result = {}
+
+    response.content_type = 'application/json'
+
+    print('POST', request.json)
+    result = dict()
+
     if request.json['action'] == 'get-all':
-        all_cards = db.get_all_cards()
-        
+        all_cards = []
+        for key, card in map(lambda x: (x, db.get_card(x)), db.get_all_keys()):
+            curr_card = dict()
+            curr_card['id'] = key
+            curr_card['title'] = card.title
+            curr_card['author'] = card.author
+            curr_card['year'] = card.year
+            curr_card['image'] = None
+            all_cards += [curr_card]
+        result['cards'] = all_cards
 
-
-    return json.dumps({1: 1})
+    return json.dumps(result)
 
 
 @route('/<img:re:favicon.ico>')
@@ -36,4 +45,7 @@ def static_serve(file):
 
 
 def run_server():
+    global db
+    db = DatabaseManager()
+    db.set_test_enviroment()
     run(host=local_ip, port=server_port)
