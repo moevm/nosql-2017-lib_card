@@ -117,7 +117,7 @@ function searchCards() {
         type: document.querySelector('input[name="search-type"]:checked').value,
         title: document.getElementById("search-title").value,
         author: document.getElementById("search-author").value,
-        date: document.getElementById("search-date").value,
+        year: document.getElementById("search-date").value,
         id: document.getElementById("search-id").value
     });
     var xhr = new XMLHttpRequest();
