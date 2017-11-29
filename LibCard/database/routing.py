@@ -1,6 +1,7 @@
 from bottle import route, run, static_file, get, post, request, response
 from database.network import local_ip, server_port
 import json
+import base64
 from database.database_manager import *
 
 
@@ -29,6 +30,9 @@ def post_request():
             all_cards += [curr_card]
         result['cards'] = all_cards
         result['db'] = db.print_curr_database()
+
+    elif request.json['action'] == 'add':
+        image = base64.decodebytes(request.json['image'])
 
     return json.dumps(result)
 

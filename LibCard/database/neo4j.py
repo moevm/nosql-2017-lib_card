@@ -149,3 +149,4 @@ class Neo4jTest(unittest.TestCase):
         neo4j.add_card('3', secondCard)
         neo4j.add_card('4', thirdCard)
         self.assertEqual(neo4j.get_all_keys(), ['2', '3', '4'])
+        neo4j.clear_db()

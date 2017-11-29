@@ -143,3 +143,4 @@ class MongoTest(unittest.TestCase):
         mongoDB.add_card(third_id, card)
         all_keys = mongoDB.get_all_keys()
         self.assertTrue(all((first_id in all_keys, second_id in all_keys, third_id in all_keys)))
+        mongoDB.clear_db()

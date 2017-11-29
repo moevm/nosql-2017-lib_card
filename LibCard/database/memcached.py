@@ -121,3 +121,4 @@ class MemcachedTest(unittest.TestCase):
         memcached.add_card('3', secondCard)
         memcached.add_card('4', thirdCard)
         self.assertEqual(memcached.get_all_keys(), ['2', '3', '4'])
+        memcached.clear_db()
