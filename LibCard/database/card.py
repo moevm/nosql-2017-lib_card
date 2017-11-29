@@ -35,7 +35,7 @@ class Card:
         return self.title == other.title and self.author == other.author and self.year == other.year
 
     def is_available(self) -> bool:
-        return True if self.history is None else self.history[-1].is_available()
+        return True if len(self.history) == 0 else self.history[-1].is_available()
 
     @staticmethod
     def create_from_dict(obj) -> 'Card':

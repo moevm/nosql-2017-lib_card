@@ -1,4 +1,4 @@
-from database.card import Card
+from database.card import *
 from database.temp_database import TempDatabase
 from typing import List
 
@@ -29,7 +29,16 @@ class Database:
     def give_book(self, id_: str, reader: str, date_from: str):
 
         card = self.get_card(id_)
+        card.history += [HistoryRecord(reader, date_from, '')]
+        self.remove_card(id_)
+        self.add_card(id_, card)
 
+    def return_book(self, id_: str, date_to: str):
+
+        card = self.get_card(id_)
+        card.history[-1].date_to = date_to
+        self.remove_card(id_)
+        self.add_card(id_, card)
 
     def clear_db(self):
         pass

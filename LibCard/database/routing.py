@@ -136,7 +136,16 @@ def post_request():
         except:
             result['success'] = False
 
+    elif request.json['action'] == 'return-book':
 
+        try:
+            result['success'] = True
+            id_ = request.json['id']
+            date_to = request.json['date']
+            db.return_book(id_, date_to)
+
+        except:
+            result['success'] = False
 
     return json.dumps(result)
 

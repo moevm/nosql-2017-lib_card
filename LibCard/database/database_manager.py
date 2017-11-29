@@ -86,6 +86,9 @@ class DatabaseManager:
     def give_book(self, id_: str, reader: str, date_from: str):
         self._curr_db.give_book(id_, reader, date_from)
 
+    def return_book(self, id_: str, date_to: str):
+        self._curr_db.return_book(id_, date_to)
+
     def print_curr_database(self) -> str:
         if self._curr_db == self._memcached:
             return MEMCACHED
