@@ -1,6 +1,3 @@
-from database.network import server_ip, mongo_port
-from database.database import *
-from database.card import Card
 from pymongo import DESCENDING as DESCENDING
 from pymongo import MongoClient
 from pymongo.database import Database as MongoDatabase
@@ -49,6 +46,13 @@ class MongoDB(Database):
 
     def get_all_documents(self):
         return self.client.find()
+
+    def get_all_keys(self):
+        only_ids_cursor = self.client.find( {}, {'_id' : 1 } )
+        list = []
+        for elem in only_ids_cursor:
+            list.append(elem['_id'])
+        return list
 
     def remove_card(self, _id):
         self.client.delete_one({ '_id' : _id })
@@ -127,3 +131,21 @@ class MongoTest(unittest.TestCase):
         self.assertEqual(mongoDB.is_empty(), False)
         mongoDB.clear_db()
         self.assertEqual(mongoDB.is_empty(), True)
+
+    def test_get_all_keys(self):
+        mongoDB = MongoDB()
+        mongoDB.clear_db()
+        card = Card('Vova007', 'Artur', '2k17', None)
+        first_id = '1'
+        second_id = '2'
+        third_id = '3'
+        mongoDB.add_card(first_id, card)
+        mongoDB.add_card(second_id, card)
+        mongoDB.add_card(third_id, card)
+        all_keys = mongoDB.get_all_keys()
+        contains_first_id = all_keys.__contains__(first_id)
+        contains_second_id = all_keys.__contains__(second_id)
+        contains_third_id = all_keys.__contains__(third_id)
+        self.assertTrue(contains_first_id)
+        self.assertTrue(contains_second_id)
+        self.assertTrue(contains_third_id)
