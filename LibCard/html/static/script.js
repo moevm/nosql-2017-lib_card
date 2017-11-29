@@ -186,6 +186,7 @@ function getHTMLbyCard(card) {
 
 function closeUpdateForm() {
     document.getElementById("overlay").style = "display: none";
+    document.getElementById("update-result") = "";
 }
 
 function historyToHTML(history) {
@@ -299,7 +300,6 @@ function openUpdateForm(id) {
             }
 
             console.log(response);
-            document.getElementById("update-result").innerHTML = "";
             document.getElementById("update-form-id").innerHTML = response.id;
             document.getElementById("update-form-state").innerHTML = available;
             document.getElementById("update-form-title").value = response.title;
