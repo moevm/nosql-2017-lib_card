@@ -18,10 +18,14 @@ class Neo4j(Database):
             session.run("MATCH (node) DETACH DELETE node")
 
     def add_card(self, id_: str, card: Card):
-        query: str = """MERGE (card:Card {id: {id_}, histoty: "null"})
+        query: str = """MERGE (card:Card {id: {id_}, history: "null", image: {image}})
                        MERGE (book:Book {title: {title}, year: {year}, author: {author}})
                        MERGE (card)-[:ASSOCIATED_WITH]-(book)"""
-        args: dict = {"id_": id_, "title": card.title, "year": card.year, "author": card.author}
+        args: dict = {"id_": id_,
+                      "title": card.title,
+                      "year": card.year,
+                      "author": card.author,
+                      "image": card.image if card.image else 'null'}
         with self.client.session() as session:
             session.run(query, args)
 
@@ -34,20 +38,24 @@ class Neo4j(Database):
     def update_card(self, id_, card: Card):
         query: str = "MATCH (card:Card {id: {id_}})-[]-(book:Book) " \
                      "SET book.title = {title}, book.author = {author}, book.year = {year}"
-        args: dict = {"id_": id_, "title": card.title, "author": card.author, "year": card.year}
+        args: dict = {"id_": id_,
+                      "title": card.title,
+                      "author": card.author,
+                      "year": card.year}
         with self.client.session() as session:
             session.run(query, args)
 
     def get_card(self, id_) -> Card:
         query: str = """MATCH (card:Card {id: {id_}})--(book: Book)
-                    RETURN book.title AS title, book.author AS author, book.year AS year, card.history AS history"""
+                    RETURN book.title AS title, book.author AS author, book.year AS year, card.history AS history, card.image AS image"""
         args: dict = {"id_": id_}
         with self.client.session() as session:
             result: neo4j.v1.BoltStatementResult = session.run(query, args)
             records: list = result.data()
             if len(records) == 0:
                 return None
-            return Card.create_from_dict(records[0])
+            return Card.create_from_dict({k: (records[0][k] if records[0][k] != 'null'
+                                              else None) for k in records[0]})
 
     def get_max_id(self) -> int:
         query = "MATCH (card:Card) RETURN card.id AS id ORDER BY card.id DESC LIMIT 1"
@@ -75,24 +83,24 @@ class Neo4j(Database):
             ids: List[str] = []
             for record in records:
                 ids += [record["id"]]
-            return ids;
+            return ids
 
 
 class Neo4jTest(unittest.TestCase):
     def test_add_and_get(self):
         neo4j = Neo4j()
-        card = Card('Vova007', 'Artur', '2k17', None)
+        card = Card('Vova007', 'Artur', '2k17', None, None)
         neo4j.add_card('1', card)
         self.assertIsInstance(neo4j.get_card('1'), Card)
         neo4j.clear_db()
 
     def test_update(self):
         neo4j = Neo4j()
-        card = Card('Vova007', 'Artur', '2k17', None)
+        card = Card('Vova007', 'Artur', '2k17', None, None)
         neo4j.add_card('1', card)
         old_card = neo4j.get_card('1')
         old_card_tuple = (old_card.title, old_card.author, old_card.year, old_card.history)
-        card_for_update = Card('Spica', 'Spicin', '1980', None)
+        card_for_update = Card('Spica', 'Spicin', '1980', None, None)
         neo4j.update_card('1', card_for_update)
         updated_card = neo4j.get_card('1')
         new_card_tuple = (updated_card.title, updated_card.author,updated_card.year, updated_card.history)
@@ -101,7 +109,7 @@ class Neo4jTest(unittest.TestCase):
 
     def test_remove(self):
         neo4j = Neo4j()
-        card = Card('Vova007', 'Artur', '2k17', None)
+        card = Card('Vova007', 'Artur', '2k17', None, None)
         neo4j.add_card('1', card)
         neo4j.remove_card('1')
         search_result = neo4j.get_card('1')
@@ -110,9 +118,9 @@ class Neo4jTest(unittest.TestCase):
 
     def test_get_max_id(self):
         neo4j = Neo4j()
-        firstCard = Card('Vova007', 'Artur', '2k17', None)
-        secondCard = Card('Vova007', 'Artur', '2k17', None)
-        thirdCard = Card('Vova007', 'Artur', '2k17', None)
+        firstCard = Card('Vova007', 'Artur', '2k17', None, None)
+        secondCard = Card('Vova007', 'Artur', '2k17', None, None)
+        thirdCard = Card('Vova007', 'Artur', '2k17', None, None)
         neo4j.add_card('2',firstCard)
         neo4j.add_card('3', secondCard)
         neo4j.add_card('4', thirdCard)
@@ -126,7 +134,7 @@ class Neo4jTest(unittest.TestCase):
 
     def test_is_empty(self):
         neo4j = Neo4j()
-        card = Card('Vova007', 'Artur', '2k17', None)
+        card = Card('Vova007', 'Artur', '2k17', None, None)
         neo4j.add_card('1', card)
         self.assertEqual(neo4j.is_empty(), False)
         neo4j.clear_db()
@@ -134,9 +142,9 @@ class Neo4jTest(unittest.TestCase):
 
     def test_get_all_cards(self):
         neo4j = Neo4j()
-        firstCard = Card('Vova007', 'Artur', '2k17', None)
-        secondCard = Card('Vova007', 'Artur', '2k17', None)
-        thirdCard = Card('Vova007', 'Artur', '2k17', None)
+        firstCard = Card('Vova007', 'Artur', '2k17', None, None)
+        secondCard = Card('Vova007', 'Artur', '2k17', None, None)
+        thirdCard = Card('Vova007', 'Artur', '2k17', None, None)
         neo4j.add_card('2', firstCard)
         neo4j.add_card('3', secondCard)
         neo4j.add_card('4', thirdCard)

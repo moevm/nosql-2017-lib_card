@@ -20,14 +20,16 @@ class MongoDB(Database):
                                     "title": card.title,
                                     "author": card.author,
                                     "year": card.year,
-                                    "history": None})
+                                    "image": card.image,
+                                    "history": card.history})
         except:
             self.client.replace_one(self.client.find({"_id": id_}).next(),
                                     {"_id": id_,
                                      "title": card.title,
                                      "author": card.author,
                                      "year": card.year,
-                                     "history": None})
+                                     "image": card.image,
+                                     "history": card.history})
 
     def get_card(self, id_):
         self.client: MongoDatabase
@@ -60,7 +62,8 @@ class MongoDB(Database):
                                  "title": card.title,
                                  "author": card.author,
                                  "year": card.year,
-                                 "history": None})
+                                 "image": card.image,
+                                 "history": card.history})
         except:
             print('No such card to update')
 
@@ -77,27 +80,27 @@ class MongoDB(Database):
 class MongoTest(unittest.TestCase):
     def test_add_and_get(self):
         mongoDB = MongoDB()
-        card = Card('Vova007', 'Artur', '2k17', None)
-        mongoDB.add_card('1',card)
+        card = Card('Vova007', 'Artur', '2k17', None, None)
+        mongoDB.add_card('1', card)
         self.assertIsInstance(mongoDB.get_card('1'), Card)
         mongoDB.clear_db()
 
     def test_update(self):
         mongoDB = MongoDB()
-        card = Card('Vova007', 'Artur', '2k17', None)
+        card = Card('Vova007', 'Artur', '2k17', None, None)
         mongoDB.add_card('1', card)
         old_card = mongoDB.get_card('1')
-        old_card_tuple = (old_card.title,old_card.author,old_card.year, old_card.history)
-        card_for_update = Card('Spica', 'Spicin', '1980', None)
-        mongoDB.update_card('1',card_for_update)
+        old_card_tuple = (old_card.title, old_card.author, old_card.year, old_card.history, None)
+        card_for_update = Card('Spica', 'Spicin', '1980', None, None)
+        mongoDB.update_card('1', card_for_update)
         updated_card = mongoDB.get_card('1')
-        new_card_tuple = (updated_card.title,updated_card.author,updated_card.year, updated_card.history)
-        self.assertNotEqual(old_card_tuple,new_card_tuple, 'Comparing old and new cards')
+        new_card_tuple = (updated_card.title, updated_card.author,updated_card.year, updated_card.history, None)
+        self.assertNotEqual(old_card_tuple, new_card_tuple, 'Comparing old and new cards')
         mongoDB.clear_db()
 
     def test_remove(self):
         mongoDB = MongoDB()
-        card = Card('Vova007', 'Artur', '2k17', None)
+        card = Card('Vova007', 'Artur', '2k17', None, None)
         mongoDB.add_card('1', card)
         mongoDB.remove_card('1')
         search_result = mongoDB.get_card('1')
@@ -106,9 +109,9 @@ class MongoTest(unittest.TestCase):
 
     def test_get_max_id(self):
         mongoDB = MongoDB()
-        firstCard = Card('Vova007', 'Artur', '2k17', None)
-        secondCard = Card('Vova007', 'Artur', '2k17', None)
-        thirdCard = Card('Vova007', 'Artur', '2k17', None)
+        firstCard = Card('Vova007', 'Artur', '2k17', None, None)
+        secondCard = Card('Vova007', 'Artur', '2k17', None, None)
+        thirdCard = Card('Vova007', 'Artur', '2k17', None, None)
         mongoDB.add_card('2',firstCard)
         mongoDB.add_card('3', secondCard)
         mongoDB.add_card('4', thirdCard)
@@ -122,7 +125,7 @@ class MongoTest(unittest.TestCase):
 
     def test_is_empty(self):
         mongoDB = MongoDB()
-        card = Card('Vova007', 'Artur', '2k17', None)
+        card = Card('Vova007', 'Artur', '2k17', None, None)
         mongoDB.add_card('1', card)
         self.assertEqual(mongoDB.is_empty(), False)
         mongoDB.clear_db()
@@ -131,7 +134,7 @@ class MongoTest(unittest.TestCase):
     def test_get_all_keys(self):
         mongoDB = MongoDB()
         mongoDB.clear_db()
-        card = Card('Vova007', 'Artur', '2k17', None)
+        card = Card('Vova007', 'Artur', '2k17', None, None)
         first_id = '1'
         second_id = '2'
         third_id = '3'

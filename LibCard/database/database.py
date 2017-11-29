@@ -5,7 +5,7 @@ from typing import List
 
 DBTYPE = str
 MEMCACHED = 'memcached'
-MONGODB = 'mongo db'
+MONGODB = 'mongodb'
 NEO4J = 'neo4j'
 
 

@@ -15,11 +15,12 @@ class HistoryRecord:
 
 class Card:
 
-    def __init__(self, title: str, author: str, year: str, history: List[HistoryRecord]=None):
+    def __init__(self, title: str, author: str, year: str, history: List[HistoryRecord], image: str):
         self.title = title
         self.author = author
         self.year = year
         self.history = history
+        self.image = image
 
     def __str__(self):
         return f'Card({self.title} {self.author} {self.year})'
@@ -29,4 +30,5 @@ class Card:
 
     @staticmethod
     def create_from_dict(obj) -> 'Card':
-        return Card(obj['title'], obj['author'], obj['year'], HistoryRecord.create_from_list(obj['history']))
+        return Card(obj['title'], obj['author'], obj['year'],
+                    HistoryRecord.create_from_list(obj['history']), obj['image'])

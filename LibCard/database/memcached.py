@@ -17,7 +17,11 @@ class Memcached(Database):
     def add_card(self, id_: str, card: Card):
         self.client: MemcacheClient
         self.client.delete(id_)
-        self.client.add(id_, {'title': card.title, 'author': card.author, 'year': card.year, 'history': None})
+        self.client.add(id_, {'title': card.title,
+                              'author': card.author,
+                              'year': card.year,
+                              'image': card.image,
+                              'history': card.history})
         if id_ not in self.keys:
             self.keys += [id_]
             self.client.set('keys', self.keys)
@@ -57,18 +61,18 @@ class Memcached(Database):
 class MemcachedTest(unittest.TestCase):
     def test_add_and_get(self):
         memcached = Memcached()
-        card = Card('Vova007', 'Artur', '2k17', None)
+        card = Card('Vova007', 'Artur', '2k17', None, None)
         memcached.add_card('1', card)
         self.assertIsInstance(memcached.get_card('1'), Card)
         memcached.clear_db()
 
     def test_update(self):
         memcached = Memcached()
-        card = Card('Vova007', 'Artur', '2k17', None)
+        card = Card('Vova007', 'Artur', '2k17', None, None)
         memcached.add_card('1', card)
         old_card = memcached.get_card('1')
         old_card_tuple = (old_card.title, old_card.author, old_card.year, old_card.history)
-        card_for_update = Card('Spica', 'Spicin', '1980', None)
+        card_for_update = Card('Spica', 'Spicin', '1980', None, None)
         memcached.update_card('1', card_for_update)
         updated_card = memcached.get_card('1')
         new_card_tuple = (updated_card.title, updated_card.author, updated_card.year, updated_card.history)
@@ -77,7 +81,7 @@ class MemcachedTest(unittest.TestCase):
 
     def test_remove(self):
         memcached = Memcached()
-        card = Card('Vova007', 'Artur', '2k17', None)
+        card = Card('Vova007', 'Artur', '2k17', None, None)
         memcached.add_card('1', card)
         memcached.remove_card('1')
         search_result = memcached.get_card('1')
@@ -86,9 +90,9 @@ class MemcachedTest(unittest.TestCase):
 
     def test_get_max_id(self):
         memcached = Memcached()
-        firstCard = Card('Vova007', 'Artur', '2k17', None)
-        secondCard = Card('Vova007', 'Artur', '2k17', None)
-        thirdCard = Card('Vova007', 'Artur', '2k17', None)
+        firstCard = Card('Vova007', 'Artur', '2k17', None, None)
+        secondCard = Card('Vova007', 'Artur', '2k17', None, None)
+        thirdCard = Card('Vova007', 'Artur', '2k17', None, None)
         memcached.add_card('2', firstCard)
         memcached.add_card('3', secondCard)
         memcached.add_card('4', thirdCard)
@@ -102,7 +106,7 @@ class MemcachedTest(unittest.TestCase):
 
     def test_is_empty(self):
         memcached = Memcached()
-        card = Card('Vova007', 'Artur', '2k17', None)
+        card = Card('Vova007', 'Artur', '2k17', None, None)
         memcached.add_card('1', card)
         self.assertEqual(memcached.is_empty(), False)
         memcached.clear_db()
@@ -110,9 +114,9 @@ class MemcachedTest(unittest.TestCase):
 
     def test_get_all_cards(self):
         memcached = Memcached()
-        firstCard = Card('Vova007', 'Artur', '2k17', None)
-        secondCard = Card('Vova007', 'Artur', '2k17', None)
-        thirdCard = Card('Vova007', 'Artur', '2k17', None)
+        firstCard = Card('Vova007', 'Artur', '2k17', None, None)
+        secondCard = Card('Vova007', 'Artur', '2k17', None, None)
+        thirdCard = Card('Vova007', 'Artur', '2k17', None, None)
         memcached.add_card('2', firstCard)
         memcached.add_card('3', secondCard)
         memcached.add_card('4', thirdCard)
