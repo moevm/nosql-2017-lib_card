@@ -103,8 +103,11 @@ class DatabaseManager:
         self.add_card('С++ для чайников', 'Стефан Р. Дэвис', '2011', 'https://img.yumpu.com/55907147/1/358x526/-.jpg?quality=80')
         self.add_card('Война и мир', 'Лев Толстой', '1869', 'http://merpesnya.ru/uploads/images/v/o/j/vojna_i_mir.jpg')
         self.add_card('Преступление и наказание', 'Ф. М. Достоевский', '1866', 'https://sweetbook.net/uploads/topics/preview/00/00/03/50/f3c22d7a59.jpg')
-
-
+        self.add_card('Мастер и Маргарита', 'Михаил Булгаков', '1966', 'http://minemshop.ru/images/1012150539.jpg')
+        self.add_card('Мертвые души', 'Николай Гоголь', '1842', 'https://cdn.27.ua/799/63/bf/222143_1.jpeg')
+        self.add_card('Горе от ума', 'А. Грибоедов', '1862', 'http://minemshop.ru/images/1010251788.jpg')
+        self.add_card('Анна Каренина', 'Лев Толстой', '1877', 'https://cdn.27.ua/799/62/98/221848_1.jpeg')
+        self.add_card('Руслан и Людмила', 'А. С. Пушкин', '1825', 'http://newbookshop.ru/pictures/1005502028.jpg')
 
 class DatabaseManagerTests(unittest.TestCase):
     def test_switching(self):
