@@ -56,5 +56,30 @@
         <div id="cards">
         </div>
 
+        <div id="overlay">
+            <div id="update-form">
+                <div id="update-form-left">
+                    <br>Идентификатор - <span id="update-form-id">1234</span><br><br>
+                    <image id="update-form-image" src="https://pp.userapi.com/c637724/v637724478/dcf1/YeXTX5xb7Qs.jpg"></image><br><br>
+                    <span id="update-form-state">Книга в наличии</span><br><br>
+                    Название:<br><input type="text" id="update-form-title"/><br><br>
+                    Автор:<br><input type="text" id="update-form-author"/><br><br>
+                    Год выпуска:<br><input type="text" id="update-form-year"/><br><br>
+                </div>
+                <div id="update-form-right">
+                    <div id="update-form-close">
+                        <img id="close-icon" src="img/close.png" onclick="closeUpdateForm()"></img><br><br>
+                        Список выдачи:<br>
+                        <div id="history"></div><br><br>
+                        <span id="date-label">Дата возврата</span>
+                        <input id="date" type="text"/><br><br>
+                        <span id="give-take" class="btn">Выдать книгу</span><br><br>
+                        <span id="save" class="btn">Сохранить</span>
+                        <span id="remove" class="btn">Удалить</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </body>
 </html>

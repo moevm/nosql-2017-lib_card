@@ -166,7 +166,7 @@ function getHTMLbyCard(card) {
     var imageURL = card.image;
     if (imageURL == "null") imageURL = "";
     cardHTML = "";
-    cardHTML += '<div id="' + card.id + '" class="card">';
+    cardHTML += '<div id="' + card.id + '" class="card" onclick="openUpdateForm(' + card.id + ')">';
     cardHTML += '<div class="card-image-container"><img class="card-image" src="' + imageURL + '"></img></div>';
     cardHTML += '<div class="card-info"><div class="card-info-item">';
     cardHTML += 'Название:<br><span class="field-value">' + card.title + '</span></div>';
@@ -174,4 +174,52 @@ function getHTMLbyCard(card) {
     cardHTML += '<div class="card-info-item">Автор:<br><span class="field-value">' + card.author + '</span></div>';
     cardHTML += '<div class="card-id">' + card.id + '</div></div></div>'
     return cardHTML;
+}
+
+function closeUpdateForm() {
+    document.getElementById("overlay").style = "display: none";
+}
+
+function openUpdateForm(id) {
+
+    var json = JSON.stringify({
+        action: "get-info",
+        id: id
+    });
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", '/', true)
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhr.onreadystatechange = function() {
+        if(this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+
+            var response = JSON.parse(xhr.responseText);
+
+            var available = "Книга занята", dateLabel = "Дата возврата", giveTake = "Принять книгу";
+            if (response.available) {
+                available = "Кнгига свободна";
+                dateLabel = "Дата выдачи";
+                giveTake = "Выдать книгу";
+            }
+
+            console.log(response);
+            document.getElementById("update-form-id").innerHTML = response.id;
+            document.getElementById("update-form-state").innerHTML = available;
+            document.getElementById("update-form-title").innerHTML = response.title;
+            document.getElementById("update-form-author").innerHTML = response.author;
+            document.getElementById("update-form-year").innerHTML = response.year;
+            document.getElementById("date-label").innerHTML = dateLabel;
+            document.getElementById("give-take").innerHTML = giveTake;
+            document.getElementById("history").innerHTML = historyToHTML(response.history);
+            document.getElementById("overlay").style = "display: block";
+        }
+    }
+    xhr.send(json);
+}
+
+function historyToHTML(history) {
+    var html = "";
+    for (var i = 0; i < history.length; i++) {
+        html += history[i].reader + ", " + history[i].from + " - " + history[i].to + "<br>";
+    }
+    return html;
 }
