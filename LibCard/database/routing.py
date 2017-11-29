@@ -147,6 +147,16 @@ def post_request():
         except:
             result['success'] = False
 
+    elif request.json['action'] == 'delete':
+
+        try:
+            result['success'] = True
+            id_ = request.json['id']
+            db.remove_card(id_)
+
+        except:
+            result['success'] = False
+
     return json.dumps(result)
 
 
