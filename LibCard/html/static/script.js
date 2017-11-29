@@ -91,7 +91,6 @@ function addCard() {
     xhr.onreadystatechange = function() {
         if(this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response.success);
             if (response.success == true) {
                 document.getElementById("add-result").innerHTML = "Карточка добавлена";
                 var card = {
@@ -99,7 +98,7 @@ function addCard() {
                     image: response.image,
                     title: response.title,
                     author: response.author,
-                    date: response.year
+                    year: response.year
                 };
                 document.getElementById("cards").innerHTML += getHTMLbyCard(card);
             } else {
@@ -166,7 +165,7 @@ function getHTMLbyCard(card) {
     cardHTML += '<div class="card-image-container"><img class="card-image" src="' + imageURL + '"></img></div>';
     cardHTML += '<div class="card-info"><div class="card-info-item">';
     cardHTML += 'Название:<br><span class="field-value">' + card.title + '</span></div>';
-    cardHTML += '<div class="card-info-item">Год выпуска:<br><span class="field-value">' + card.date + '</span></div>';
+    cardHTML += '<div class="card-info-item">Год выпуска:<br><span class="field-value">' + card.year + '</span></div>';
     cardHTML += '<div class="card-info-item">Автор:<br><span class="field-value">' + card.author + '</span></div>';
     cardHTML += '<div class="card-id">' + card.id + '</div></div></div>'
     return cardHTML;
