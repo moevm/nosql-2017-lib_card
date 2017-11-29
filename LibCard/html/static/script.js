@@ -23,12 +23,25 @@ window.onload = function() {
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.onreadystatechange = function() {
         if(this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            cards = JSON.parse(xhr.responseText).cards;
-            cardsHTML = ""
+
+            var response = JSON.parse(xhr.responseText);
+
+            //set current db radiobutton
+            console.log("db" + response.db);
+            document.getElementById("radio-memcached").checked = false;
+            document.getElementById("radio-mongodb").checked = false;
+            document.getElementById("radio-neo4j").checked = false;
+            var radioButton = document.getElementById("radio-" + response.db);
+            radioButton.checked = true;
+
+            //add cards
+            var cards = response.cards;
+            var cardsHTML = ""
             for (var i = 0; i < cards.length; i++) {
                 cardsHTML += getHTMLbyCard(cards[i]);
             }
             document.getElementById("cards").innerHTML = cardsHTML;
+
         } else {
             document.getElementById("cards").innerHTML = "<div style='width: 100%; text-align: center'>Ошибка подключения</div>";
         };
@@ -132,9 +145,11 @@ function switchDB() {
 
 
 function getHTMLbyCard(card) {
+    var imageURL = card.image;
+    if (imageURL == "null") imageURL = "";
     cardHTML = "";
     cardHTML += '<div id="' + card.id + '" class="card">';
-    cardHTML += '<div class="card-image-container"><img class="card-image" src="' + card.image + '"></img></div>';
+    cardHTML += '<div class="card-image-container"><img class="card-image" src="' + imageURL + '"></img></div>';
     cardHTML += '<div class="card-info"><div class="card-info-item">';
     cardHTML += 'Название:<br><span class="field-value">' + card.title + '</span></div>';
     cardHTML += '<div class="card-info-item">Год выпуска:<br><span class="field-value">' + card.date + '</span></div>';
