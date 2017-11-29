@@ -14,12 +14,6 @@ class Memcached(Database):
         if self.keys is None:
             self.keys = []
 
-    def create_temp_db(self) -> TempDatabase:
-        pass
-
-    def load_from_temp_db(self, database: TempDatabase):
-        pass
-
     def add_card(self, id_: str, card: Card):
         self.client: MemcacheClient
         self.client.delete(id_)

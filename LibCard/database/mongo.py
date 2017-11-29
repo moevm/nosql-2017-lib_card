@@ -13,12 +13,6 @@ class MongoDB(Database):
         client = MongoClient(ip, port)
         super().__init__(client.library.my_collection, MONGODB)
 
-    def create_temp_db(self) -> TempDatabase:
-        pass
-
-    def load_from_temp_db(self, database: TempDatabase):
-        pass
-
     def add_card(self, id_: str, card: Card):
         self.client: MongoCollection
         try:

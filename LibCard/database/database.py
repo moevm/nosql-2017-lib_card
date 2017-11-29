@@ -16,10 +16,15 @@ class Database:
         self.type = type_
 
     def create_temp_db(self) -> TempDatabase:
-        pass
+        cards = []
+        for key in self.get_all_keys():
+            cards += [(key, self.get_card(key))]
+        return TempDatabase(cards)
 
     def load_from_temp_db(self, database: TempDatabase):
-        pass
+        self.clear_db()
+        for key, card in database.cards:
+            self.add_card(key, card)
 
     def clear_db(self):
         pass
