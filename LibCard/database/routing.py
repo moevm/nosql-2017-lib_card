@@ -47,6 +47,14 @@ def post_request():
         except:
             result['success'] = False
 
+    elif request.json['action'] == 'switch-db':
+        try:
+            db.switch_to_database(request.json['db'])
+            result['success'] = True
+
+        except:
+            result['success'] = False
+
     return json.dumps(result)
 
 

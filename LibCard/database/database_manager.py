@@ -92,7 +92,7 @@ class DatabaseManager:
             return NEO4J
 
     def set_test_enviroment(self):
-        self.switch_to_database(MEMCACHED)
+        self.switch_to_database(MONGODB)
         self.add_card('Best seller', 'Vladimir', '2k17', 'https://pp.userapi.com/c637724/v637724478/dcf1/YeXTX5xb7Qs.jpg')
         self.add_card('Another best', 'Igor', '2017', 'https://pp.userapi.com/c628227/v628227701/250f0/sInX-bnpoas.jpg')
         self.add_card('Other best', 'Artur', '20I7', 'https://pp.userapi.com/c623328/v623328809/1619d/gBqdJqNfctI.jpg')
