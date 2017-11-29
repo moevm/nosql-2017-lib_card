@@ -76,6 +76,9 @@ function switchSidebar(sidebar) {
         searchSidebar.style = "display: none";
         settingsSidebar.style = "display: block";
     }
+    document.getElementById("add-result").innerHTML = "";
+    document.getElementById("search-result").innerHTML = "";
+    document.getElementById("apply-result").innerHTML = "";
 }
 
 function addCard() {
