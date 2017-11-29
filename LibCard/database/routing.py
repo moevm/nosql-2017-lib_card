@@ -94,6 +94,7 @@ def post_request():
     elif request.json['action'] == 'update':
 
         try:
+
             result['success'] = True
             db.update_card(request.json['id'],
                            request.json['title'],
@@ -127,6 +128,10 @@ def post_request():
     elif request.json['action'] == 'give-card':
 
         try:
+
+            if request.json['date'] == '':
+                raise ValueError
+
             result['success'] = True
             id_ = request.json['id']
             reader = request.json['reader']
@@ -139,6 +144,10 @@ def post_request():
     elif request.json['action'] == 'return-card':
 
         try:
+
+            if request.json['date'] == '':
+                raise ValueError
+
             result['success'] = True
             id_ = request.json['id']
             date_to = request.json['date']
