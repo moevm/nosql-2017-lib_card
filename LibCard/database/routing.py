@@ -26,13 +26,26 @@ def post_request():
             curr_card['title'] = card.title
             curr_card['author'] = card.author
             curr_card['year'] = card.year
-            curr_card['image'] = None
+            curr_card['image'] = card.image
             all_cards += [curr_card]
         result['cards'] = all_cards
         result['db'] = db.print_curr_database()
 
     elif request.json['action'] == 'add':
-        image = base64.decodebytes(request.json['image'])
+        try:
+            key = db.add_card(request.json['title'],
+                              request.json['author'],
+                              request.json['year'],
+                              request.json['image'])
+            result['success'] = True
+            result['id'] = key
+            result['title'] = request.json['title']
+            result['author'] = request.json['author']
+            result['year'] = request.json['year']
+            result['image'] = request.json['image']
+
+        except:
+            result['success'] = False
 
     return json.dumps(result)
 

@@ -57,13 +57,14 @@ class MongoDB(Database):
 
     def update_card(self, _id, card: Card):
         try:
+            old = self.get_card(_id)
             self.client.replace_one(self.client.find({"_id": _id}).next(),
                                 {"_id": _id,
                                  "title": card.title,
                                  "author": card.author,
                                  "year": card.year,
-                                 "image": card.image,
-                                 "history": card.history})
+                                 "image": old.image,
+                                 "history": old.history})
         except:
             print('No such card to update')
 

@@ -66,9 +66,9 @@ class DatabaseManager:
     def clear_db(self):
         self._curr_db.clear_db()
 
-    def add_card(self, title, author, year) -> str:
+    def add_card(self, title, author, year, image) -> str:
         id_ = self._next_id()
-        self._curr_db.add_card(id_, Card(title, author, year, None, None))
+        self._curr_db.add_card(id_, Card(title, author, year, None, image))
         return id_
 
     def remove_card(self, id_):

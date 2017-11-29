@@ -39,6 +39,9 @@ class Memcached(Database):
             self.client.set('keys', self.keys)
 
     def update_card(self, id_, card: Card) -> None:
+        old = self.get_card(id_)
+        card.image = old.image
+        card.history = old.history
         self.add_card(id_, card)
 
     def get_max_id(self):
