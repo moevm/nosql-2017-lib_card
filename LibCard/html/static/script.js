@@ -82,7 +82,7 @@ function addCard() {
         action: "add",
         title: document.getElementById("add-title").value,
         author: document.getElementById("add-author").value,
-        date: document.getElementById("add-date").value,
+        year: document.getElementById("add-date").value,
         image: document.getElementById("add-image").value
     });
     var xhr = new XMLHttpRequest();
@@ -90,7 +90,21 @@ function addCard() {
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.onreadystatechange = function() {
         if(this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            document.getElementById("add-result").innerHTML = xhr.responseText;
+            var response = JSON.parse(xhr.responseText);
+            console.log(response.success);
+            if (response.success == true) {
+                document.getElementById("add-result").innerHTML = "Карточка добавлена";
+                var card = {
+                    id: response.id,
+                    image: response.image,
+                    title: response.title,
+                    author: response.author,
+                    date: response.year
+                };
+                document.getElementById("cards").innerHTML += getHTMLbyCard(card);
+            } else {
+                document.getElementById("add-result").innerHTML = "Ошибка при добавлении";
+            }
         } else {
             document.getElementById("add-result").innerHTML = "Ошибка подключения";
         };
