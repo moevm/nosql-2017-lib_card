@@ -93,9 +93,9 @@ class DatabaseManager:
 
     def set_test_enviroment(self):
         self.switch_to_database(MEMCACHED)
-        self.add_card('Best seller', 'Vladimir', '2k17')
-        self.add_card('Another best', 'Artur', '2017')
-        self.add_card('Other best', 'Igor', '20I7')
+        self.add_card('Best seller', 'Vladimir', '2k17', 'https://pp.userapi.com/c637724/v637724478/dcf1/YeXTX5xb7Qs.jpg')
+        self.add_card('Another best', 'Igor', '2017', 'https://pp.userapi.com/c628227/v628227701/250f0/sInX-bnpoas.jpg')
+        self.add_card('Other best', 'Artur', '20I7', 'https://pp.userapi.com/c623328/v623328809/1619d/gBqdJqNfctI.jpg')
 
 
 
@@ -112,28 +112,28 @@ class DatabaseManagerTests(unittest.TestCase):
     def test_adding(self):
         db = DatabaseManager()
         db.switch_to_database(MEMCACHED)
-        test_card = ("Test title", "Artur", "2k17")
+        test_card = ("Test title", "Artur", "2k17", 'example.png')
         key = db.add_card(*test_card)
         json = db.get_card(key)
-        self.assertEqual((json.title, json.author, json.year), test_card)
+        self.assertEqual((json.title, json.author, json.year, json.image), test_card)
         db.clear_db()
 
         db.switch_to_database(MONGODB)
         key = db.add_card(*test_card)
         json = db.get_card(key)
-        self.assertEqual((json.title, json.author, json.year), test_card)
+        self.assertEqual((json.title, json.author, json.year, json.image), test_card)
         db.clear_db()
 
         db.switch_to_database(NEO4J)
         key = db.add_card(*test_card)
         json = db.get_card(key)
-        self.assertEqual((json.title, json.author, json.year), test_card)
+        self.assertEqual((json.title, json.author, json.year, json.image), test_card)
         db.clear_db()
 
     def test_choose_right_db_to_start(self):
         db = DatabaseManager()
         db.switch_to_database(MONGODB)
-        test_card = ("Test title", "Artur", "2k17")
+        test_card = ("Test title", "Artur", "2k17", 'example.png')
         db.add_card(*test_card)
         del db
 
@@ -157,31 +157,31 @@ class DatabaseManagerTests(unittest.TestCase):
     def test_correct_data_after_reloading_db(self):
         db = DatabaseManager()
         db.switch_to_database(MEMCACHED)
-        test_card = ("Test title", "Artur", "2k17")
+        test_card = ("Test title", "Artur", "2k17", 'example.png')
         key = db.add_card(*test_card)
         del db
 
         db = DatabaseManager()
         result = db.get_card(key)
-        self.assertEqual((result.title, result.author, result.year), test_card)
+        self.assertEqual((result.title, result.author, result.year, result.image), test_card)
         db.clear_db()
 
-        test_card = ("Another Test title", "Vladimir", "1996")
+        test_card = ("Another Test title", "Vladimir", "1996", 'example.png')
         db.switch_to_database(NEO4J)
         key = db.add_card(*test_card)
         del db
 
         db = DatabaseManager()
         result = db.get_card(key)
-        self.assertEqual((result.title, result.author, result.year), test_card)
+        self.assertEqual((result.title, result.author, result.year, result.image), test_card)
         db.clear_db()
 
-        test_card = ("Other Test title", "Igorek", "2017")
+        test_card = ("Other Test title", "Igorek", "2017", 'example.png')
         db.switch_to_database(MONGODB)
         key = db.add_card(*test_card)
         del db
 
         db = DatabaseManager()
         result = db.get_card(key)
-        self.assertEqual((result.title, result.author, result.year), test_card)
+        self.assertEqual((result.title, result.author, result.year, result.image), test_card)
         db.clear_db()
