@@ -3,6 +3,8 @@ from pymongo import MongoClient
 from pymongo.database import Database as MongoDatabase
 from pymongo.collection import Collection as MongoCollection
 import unittest
+from database.database import *
+from database.network import *
 
 
 class MongoDB(Database):
@@ -143,9 +145,4 @@ class MongoTest(unittest.TestCase):
         mongoDB.add_card(second_id, card)
         mongoDB.add_card(third_id, card)
         all_keys = mongoDB.get_all_keys()
-        contains_first_id = all_keys.__contains__(first_id)
-        contains_second_id = all_keys.__contains__(second_id)
-        contains_third_id = all_keys.__contains__(third_id)
-        self.assertTrue(contains_first_id)
-        self.assertTrue(contains_second_id)
-        self.assertTrue(contains_third_id)
+        self.assertTrue(all((first_id in all_keys, second_id in all_keys, third_id in all_keys)))
