@@ -306,6 +306,13 @@ function openUpdateForm(id) {
             document.getElementById("give-take").innerHTML = giveTake;
             document.getElementById("history").innerHTML = historyToHTML(response.history);
             document.getElementById("update-form-image").src = response.image;
+            var d = new Date();
+            var curr_date = d.getDate();
+            var curr_month = d.getMonth() + 1;
+            var curr_year = d.getFullYear();
+            var date = curr_year + "-" + curr_month + "-" + curr_date;
+            document.getElementById("date").value = date;
+
             document.getElementById("overlay").style = "display: block";
         } else {
             document.getElementById("overlay").style = "display: none";
