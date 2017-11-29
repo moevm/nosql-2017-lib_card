@@ -184,7 +184,7 @@ function openUpdateForm(id) {
 
     var json = JSON.stringify({
         action: "get-info",
-        id: id
+        id: id + ""
     });
     var xhr = new XMLHttpRequest();
     xhr.open("POST", '/', true)
