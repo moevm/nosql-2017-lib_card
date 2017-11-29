@@ -102,6 +102,10 @@ function addCard() {
                     year: response.year
                 };
                 document.getElementById("cards").innerHTML += getHTMLbyCard(card);
+                document.getElementById("add-title").value = "";
+                document.getElementById("add-author").value = "";
+                document.getElementById("add-date").value = "";
+                document.getElementById("add-image").value = "";
             } else {
                 document.getElementById("add-result").innerHTML = "Ошибка при добавлении";
             }
@@ -257,6 +261,7 @@ function giveTake() {
             if (JSON.parse(xhr.responseText).success == true) {
                 openUpdateForm(cardId);
                 document.getElementById("update-result").innerHTML = "История обновлена";
+                document.getElementById("reader").value = "";
             } else {
                 document.getElementById("update-result").innerHTML = "Ошибка при изменении истории";
             }
