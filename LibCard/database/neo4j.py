@@ -13,12 +13,6 @@ class Neo4j(Database):
         super().__init__(session, NEO4J)
         self.client: neo4j.v1.Driver
 
-    def create_temp_db(self) -> TempDatabase:
-        pass
-
-    def load_from_temp_db(self, database: TempDatabase):
-        pass
-
     def clear_db(self):
         with self.client.session() as session:
             session.run("MATCH (node) DETACH DELETE node")
@@ -72,6 +66,16 @@ class Neo4j(Database):
             if len(records) == 0:
                 return True
             return bool(records[0]["isEmpty"])
+
+    def get_all_keys(self) -> List[str]:
+        query = "MATCH (card:Card) RETURN card.id AS id"
+        with self.client.session() as session:
+            result: neo4j.v1.BoltStatementResult = session.run(query)
+            records: list = result.data()
+            ids: List[str] = []
+            for record in records:
+                ids += [record["id"]]
+            return ids;
 
 
 class Neo4jTest(unittest.TestCase):
@@ -127,3 +131,13 @@ class Neo4jTest(unittest.TestCase):
         self.assertEqual(neo4j.is_empty(), False)
         neo4j.clear_db()
         self.assertEqual(neo4j.is_empty(), True)
+
+    def test_get_all_cards(self):
+        neo4j = Neo4j()
+        firstCard = Card('Vova007', 'Artur', '2k17', None)
+        secondCard = Card('Vova007', 'Artur', '2k17', None)
+        thirdCard = Card('Vova007', 'Artur', '2k17', None)
+        neo4j.add_card('2', firstCard)
+        neo4j.add_card('3', secondCard)
+        neo4j.add_card('4', thirdCard)
+        self.assertEqual(neo4j.get_all_keys(), ['2', '3', '4'])
