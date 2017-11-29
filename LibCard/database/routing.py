@@ -1,7 +1,6 @@
 from bottle import route, run, static_file, get, post, request, response
 from database.network import local_ip, server_port
 import json
-import base64
 from database.database_manager import *
 
 
@@ -54,6 +53,43 @@ def post_request():
 
         except:
             result['success'] = False
+
+    elif request.json['action'] == 'search':
+
+        type_ = request.json['type']
+
+        title = request.json['title']
+        author = request.json['author']
+        year = request.json['year']
+        id_ = request.json['id']
+
+        cards = list(map(lambda x: (x, db.get_card(x)), db.get_all_keys()))
+
+        if type_ == 'all':
+            pass
+
+        elif type_ == 'available':
+            cards = [card for card in cards if card[1].is_available()]
+
+        elif type_ == 'unavailable':
+            cards = [card for card in cards if not card[1].is_available()]
+
+        else:
+            cards = []
+
+        cards = [card for card in cards if title in card[1].title and
+                 author in card[1].author and year in card[1].year and id_ in card[0]]
+
+        found_cards = []
+        for key, card in cards:
+            curr_card = dict()
+            curr_card['id'] = key
+            curr_card['title'] = card.title
+            curr_card['author'] = card.author
+            curr_card['year'] = card.year
+            curr_card['image'] = card.image
+            found_cards += [curr_card]
+        result['cards'] = found_cards
 
     return json.dumps(result)
 

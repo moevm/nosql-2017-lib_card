@@ -8,6 +8,9 @@ class HistoryRecord:
         self.date_from = date_from
         self.date_to = date_to
 
+    def is_available(self):
+        return self.date_from is not None and self.date_to is not None
+
     @staticmethod
     def create_from_list(obj: List[Dict[str, str]]):
         return [HistoryRecord(i['reader'], i['from'], i['to']) for i in obj] if obj else None
@@ -27,6 +30,9 @@ class Card:
 
     def __eq__(self, other: 'Card'):
         return self.title == other.title and self.author == other.author and self.year == other.year
+
+    def is_available(self):
+        return True if self.history is None else self.history[-1].is_available()
 
     @staticmethod
     def create_from_dict(obj) -> 'Card':
