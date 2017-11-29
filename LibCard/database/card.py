@@ -11,6 +11,9 @@ class HistoryRecord:
     def is_available(self) -> bool:
         return self.date_from != '' and self.date_to != ''
 
+    def to_dict(self):
+        return {'reader': self.reader, 'from': self.date_from, 'to': self.date_to}
+
     @staticmethod
     def create_from_list(obj: List[Dict[str, str]]):
         return [HistoryRecord(i['reader'], i['from'], i['to']) for i in obj] if obj else None
@@ -22,7 +25,7 @@ class Card:
         self.title = title
         self.author = author
         self.year = year
-        self.history = history
+        self.history = history if history is not None else []
         self.image = image
 
     def __str__(self):

@@ -26,6 +26,11 @@ class Database:
         for key, card in database.cards:
             self.add_card(key, card)
 
+    def give_book(self, id_: str, reader: str, date_from: str):
+
+        card = self.get_card(id_)
+
+
     def clear_db(self):
         pass
 

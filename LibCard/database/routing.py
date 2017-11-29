@@ -124,6 +124,20 @@ def post_request():
 
         result['history'] = history
 
+    elif request.json['action'] == 'give-book':
+
+        try:
+            result['success'] = True
+            id_ = request.json['id']
+            reader = request.json['reader']
+            date_from = request.json['date']
+            db.give_book(id_, reader, date_from)
+
+        except:
+            result['success'] = False
+
+
+
     return json.dumps(result)
 
 
