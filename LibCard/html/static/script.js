@@ -27,7 +27,6 @@ window.onload = function() {
             var response = JSON.parse(xhr.responseText);
 
             //set current db radiobutton
-            console.log("db" + response.db);
             document.getElementById("radio-memcached").checked = false;
             document.getElementById("radio-mongodb").checked = false;
             document.getElementById("radio-neo4j").checked = false;
@@ -84,6 +83,7 @@ function addCard() {
         title: document.getElementById("add-title").value,
         author: document.getElementById("add-author").value,
         date: document.getElementById("add-date").value,
+        image: document.getElementById("add-image").value
     });
     var xhr = new XMLHttpRequest();
     xhr.open("POST", '/', true)
