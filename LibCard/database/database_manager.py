@@ -74,8 +74,8 @@ class DatabaseManager:
     def remove_card(self, id_):
         self._curr_db.remove_card(id_)
 
-    def update_card(self, name, author, year):
-        self._curr_db.update_card(self._next_id(), Card(name, author, year, None, None))
+    def update_card(self, id_, title, author, year):
+        self._curr_db.update_card(id_, Card(title, author, year, None, None))
 
     def get_card(self, id_) -> Card:
         return self._curr_db.get_card(id_)

@@ -91,6 +91,39 @@ def post_request():
             found_cards += [curr_card]
         result['cards'] = found_cards
 
+    elif request.json['action'] == 'update':
+
+        try:
+            result['success'] = True
+            card = db.update_card(request.json['id'],
+                                  request.json['title'],
+                                  request.json['author'],
+                                  request.json['year'])
+
+        except:
+            result['success'] = False
+
+    elif request.json['action'] == 'get-info':
+
+        card = db.get_card(request.json['id'])
+        result['id'] = request.json['id']
+        result['title'] = card.title
+        result['author'] = card.author
+        result['year'] = card.year
+        result['image'] = card.image
+        result['available'] = card.is_available()
+
+        history = []
+        if history is not None:
+            for curr in card.history:
+                elem = dict()
+                elem['reader'] = curr.reader
+                elem['from'] = curr.date_from
+                elem['to'] = curr.date_to
+                history += [elem]
+
+        result['history'] = history
+
     return json.dumps(result)
 
 
