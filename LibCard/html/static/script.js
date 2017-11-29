@@ -148,7 +148,11 @@ function switchDB() {
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.onreadystatechange = function() {
         if(this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            document.getElementById("apply-result").innerHTML = xhr.responseText;
+            if (JSON.parse(xhr.responseText).success == true) {
+                document.getElementById("apply-result").innerHTML = "База данных успешно изменена";
+            } else {
+                document.getElementById("apply-result").innerHTML = "Ошибка при изменеии базы данных";
+            }
         } else {
             document.getElementById("apply-result").innerHTML = "Ошибка подключения";
         };
