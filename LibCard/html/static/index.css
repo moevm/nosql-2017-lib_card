@@ -162,6 +162,10 @@ input[type="text"], input[type="number"] {
     border-style: solid;
     border-width: 1px;
     height: 258px;
+    overflow-y: scroll;
+    text-align: left;
+    padding: 5px;
+    font-size: 12px;
 }
 
 #close-icon {
