@@ -131,6 +131,7 @@ function searchCards() {
                 cardsHTML += getHTMLbyCard(cards[i]);
             }
             document.getElementById("cards").innerHTML = cardsHTML;
+            document.getElementById("search-result").innerHTML = "";
         } else {
             document.getElementById("search-result").innerHTML = "Ошибка подключения";
         };
