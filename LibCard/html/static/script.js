@@ -196,13 +196,16 @@ function openUpdateForm(id) {
             var response = JSON.parse(xhr.responseText);
 
             var available = "Книга занята", dateLabel = "Дата возврата", giveTake = "Принять книгу";
+            document.getElementById("reader-block").style = "display: none";
             if (response.available) {
                 available = "Кнгига свободна";
                 dateLabel = "Дата выдачи";
                 giveTake = "Выдать книгу";
+                document.getElementById("reader-block").style = "display: block";
             }
 
             console.log(response);
+            document.getElementById("update-result").innerHTML = "";
             document.getElementById("update-form-id").innerHTML = response.id;
             document.getElementById("update-form-state").innerHTML = available;
             document.getElementById("update-form-title").value = response.title;
@@ -240,7 +243,6 @@ function update() {
     xhr.onreadystatechange = function() {
         if(this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             if (JSON.parse(xhr.responseText).success == true) {
-                document.getElementById("update-result").innerHTML = "Карточка успешно изменена";
                 closeUpdateForm();
                 loadAllCards();
             } else {
@@ -254,9 +256,29 @@ function update() {
 }
 
 function remove() {
-    //TODO:remove card
+    var json = JSON.stringify({
+        action: "delete",
+        id: document.getElementById("update-form-id").innerHTML + ""
+    });
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", '/', true)
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhr.onreadystatechange = function() {
+        if(this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            if (JSON.parse(xhr.responseText).success == true) {
+                closeUpdateForm();
+                loadAllCards();
+            } else {
+                document.getElementById("update-result").innerHTML = "Ошибка при удалении карточки";
+            }
+        } else {
+            document.getElementById("update-result").innerHTML = "Ошибка подключения";
+        };
+    }
+    xhr.send(json);
 }
 
 function giveTake() {
-    //TODO:give or take card
+    if (document.getElementById("update-form-state").innerHTML == "Кнгига свободна") take()
+    else give();
 }

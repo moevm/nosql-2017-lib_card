@@ -64,21 +64,25 @@
                     <span id="update-form-state">Книга в наличии</span><br><br>
                     Название:<br><input type="text" id="update-form-title"/><br><br>
                     Автор:<br><input type="text" id="update-form-author"/><br><br>
-                    Год выпуска:<br><input type="text" id="update-form-year"/><br><br>
+                    Год выпуска:<br><input type="number" id="update-form-year"/><br><br>
+                    <div id="update-result"></div>
                 </div>
                 <div id="update-form-right">
                     <div id="update-form-close">
                         <img id="close-icon" src="img/close.png" onclick="closeUpdateForm()"></img><br><br>
                         Список выдачи:<br>
-                        <div id="history"></div><br><br>
+                        <div id="history"></div><br>
+                        <div id="reader-block">
+                            ФИО читателя:<br>
+                            <input id="reader" type="text"/>
+                        </div><br>
                         <span id="date-label">Дата возврата</span>
-                        <input id="date" type="text"/><br><br>
+                        <input id="date" type="date"/><br><br>
                         <span id="give-take" class="btn" onclick="giveTake()">Выдать книгу</span><br><br>
                         <span id="save" class="btn" onclick="update()">Сохранить</span>
                         <span id="remove" class="btn" onclick="remove()">Удалить</span>
                     </div>
                 </div>
-                <div id="update-result"></div>
             </div>
         </div>
 
