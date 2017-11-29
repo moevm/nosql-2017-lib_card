@@ -137,7 +137,7 @@ input[type="text"], input[type="number"] {
     background-color: rgba(255, 255, 255, 1);
     margin: 50px auto;
     width: 550px;
-    height: 500px;
+    height: 540px;
 }
 
 #update-form-left {
@@ -170,4 +170,9 @@ input[type="text"], input[type="number"] {
     width: 20px;
     height: 20px;
     cursor: pointer;
+}
+
+#update-result {
+    height: 10px;
+    float: bottom;
 }
