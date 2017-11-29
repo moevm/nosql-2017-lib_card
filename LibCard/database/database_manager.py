@@ -99,9 +99,10 @@ class DatabaseManager:
 
     def set_test_enviroment(self):
         self.switch_to_database(MONGODB)
-        self.add_card('Best seller', 'Vladimir', '2k17', 'https://pp.userapi.com/c637724/v637724478/dcf1/YeXTX5xb7Qs.jpg')
-        self.add_card('Another best', 'Igor', '2017', 'https://pp.userapi.com/c628227/v628227701/250f0/sInX-bnpoas.jpg')
-        self.add_card('Other best', 'Artur', '20I7', 'https://pp.userapi.com/c623328/v623328809/1619d/gBqdJqNfctI.jpg')
+        self.add_card('Евгений Онегин', 'А. С. Пушкин', '1831', 'http://biseromania.ru/fgusefusgp/2326')
+        self.add_card('С++ для чайников', 'Стефан Р. Дэвис', '2011', 'https://img.yumpu.com/55907147/1/358x526/-.jpg?quality=80')
+        self.add_card('Война и мир', 'Лев Толстой', '1869', 'http://merpesnya.ru/uploads/images/v/o/j/vojna_i_mir.jpg')
+        self.add_card('Преступление и наказание', 'Ф. М. Достоевский', '1866', 'https://sweetbook.net/uploads/topics/preview/00/00/03/50/f3c22d7a59.jpg')
 
 
 

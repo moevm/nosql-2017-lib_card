@@ -124,7 +124,7 @@ def post_request():
 
         result['history'] = history
 
-    elif request.json['action'] == 'give-book':
+    elif request.json['action'] == 'give-card':
 
         try:
             result['success'] = True
@@ -136,7 +136,7 @@ def post_request():
         except:
             result['success'] = False
 
-    elif request.json['action'] == 'return-book':
+    elif request.json['action'] == 'return-card':
 
         try:
             result['success'] = True
