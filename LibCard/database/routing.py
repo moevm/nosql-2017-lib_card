@@ -95,10 +95,10 @@ def post_request():
 
         try:
             result['success'] = True
-            card = db.update_card(request.json['id'],
-                                  request.json['title'],
-                                  request.json['author'],
-                                  request.json['year'])
+            db.update_card(request.json['id'],
+                           request.json['title'],
+                           request.json['author'],
+                           request.json['year'])
 
         except:
             result['success'] = False
