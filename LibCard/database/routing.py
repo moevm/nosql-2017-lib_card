@@ -28,6 +28,7 @@ def post_request():
             curr_card['image'] = None
             all_cards += [curr_card]
         result['cards'] = all_cards
+        result['db'] = db.print_curr_database()
 
     return json.dumps(result)
 
