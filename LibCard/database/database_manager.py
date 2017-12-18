@@ -99,6 +99,7 @@ class DatabaseManager:
 
     def set_test_enviroment(self):
         self.switch_to_database(MONGODB)
+        self.clear_db()
         self.add_card('Евгений Онегин', 'А. С. Пушкин', '1831', 'http://biseromania.ru/fgusefusgp/2326')
         self.add_card('С++ для чайников', 'Стефан Р. Дэвис', '2011', 'https://img.yumpu.com/55907147/1/358x526/-.jpg?quality=80')
         self.add_card('Война и мир', 'Лев Толстой', '1869', 'http://merpesnya.ru/uploads/images/v/o/j/vojna_i_mir.jpg')
