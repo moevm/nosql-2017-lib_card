@@ -9,10 +9,10 @@ def test_all():
 
     loader = TestLoader()
     suite = TestSuite((
-        loader.loadTestsFromTestCase(MongoTest),
+        #loader.loadTestsFromTestCase(MongoTest),
         loader.loadTestsFromTestCase(MemcachedTest),
-        loader.loadTestsFromTestCase(Neo4jTest),
-        loader.loadTestsFromTestCase(DatabaseManagerTests),
+        #loader.loadTestsFromTestCase(Neo4jTest),
+        #loader.loadTestsFromTestCase(DatabaseManagerTests),
     ))
 
     runner = TextTestRunner(verbosity=2)

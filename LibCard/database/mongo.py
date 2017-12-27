@@ -6,7 +6,8 @@ import unittest
 from database.database import *
 from database.network import *
 from database.card import *
-
+from datetime import datetime
+from random import randint
 
 class MongoDB(Database):
 
@@ -146,3 +147,16 @@ class MongoTest(unittest.TestCase):
         all_keys = mongoDB.get_all_keys()
         self.assertTrue(all((first_id in all_keys, second_id in all_keys, third_id in all_keys)))
         mongoDB.clear_db()
+
+    def test_performance(self):
+        mongoDB = MongoDB()
+        mongoDB.clear_db()
+        card = Card('Vova007', 'Artur', '2k17', [HistoryRecord('1', '2', '3')], 'abc.png')
+        a = datetime.now()
+        for i in range(1000):
+            mongoDB.add_card(str(i), card)
+        print("Time for adding:",datetime.now() - a)
+        b = datetime.now()
+        for i in range(1000):
+            mongoDB.get_card(str(randint(0,999)))
+        print("Time for searching:", datetime.now() - b)

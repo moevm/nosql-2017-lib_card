@@ -4,7 +4,8 @@ from database.database import *
 from database.card import *
 import neo4j.v1
 import json
-
+from datetime import datetime
+from random import randint
 
 class Neo4j(Database):
 
@@ -153,3 +154,16 @@ class Neo4jTest(unittest.TestCase):
         neo4j.add_card('4', thirdCard)
         self.assertEqual(neo4j.get_all_keys(), ['2', '3', '4'])
         neo4j.clear_db()
+
+    def test_performance(self):
+        neo4j = Neo4j()
+        neo4j.clear_db()
+        card = Card('Vova007', 'Artur', '2k17', [HistoryRecord('1', '2', '3')], 'abc.png')
+        a = datetime.now()
+        for i in range(1000):
+            neo4j.add_card(str(i), card)
+        print("Time for adding:",datetime.now() - a)
+        b = datetime.now()
+        for i in range(1000):
+            neo4j.get_card(str(randint(0,999)))
+        print("Time for searching:", datetime.now() - b)

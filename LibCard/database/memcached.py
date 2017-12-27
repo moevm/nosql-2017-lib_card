@@ -3,7 +3,8 @@ from database.network import server_ip, memcached_port
 from database.database import *
 from database.card import *
 from memcache import Client as MemcacheClient
-
+from datetime import datetime
+from random import randint
 
 class Memcached(Database):
 
@@ -22,6 +23,7 @@ class Memcached(Database):
                               'year': card.year,
                               'image': card.image,
                               'history': [i.to_dict() for i in card.history]})
+
         if id_ not in self.keys:
             self.keys += [id_]
             self.client.set('keys', self.keys)
@@ -125,3 +127,16 @@ class MemcachedTest(unittest.TestCase):
         memcached.add_card('4', thirdCard)
         self.assertEqual(memcached.get_all_keys(), ['2', '3', '4'])
         memcached.clear_db()
+
+    def test_performance(self):
+        memcached = Memcached()
+        memcached.clear_db()
+        card = Card('Vova007', 'Artur', '2k17', [HistoryRecord('1', '2', '3')], 'abc.png')
+        a = datetime.now()
+        for i in range(1000):
+            memcached.add_card(str(i), card)
+        print("Time for adding:", datetime.now() - a)
+        b = datetime.now()
+        for i in range(1000):
+            memcached.get_card(str(randint(0, 999)))
+        print("Time for searching:", datetime.now() - b)
